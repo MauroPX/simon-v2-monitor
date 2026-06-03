@@ -1,0 +1,472 @@
+{
+  "$version": "1.0.0",
+  "$project": "simon-v2-monitor",
+  "$date": "2026-06-03",
+  "$gate_1": "PENDING_REVIEW",
+
+  "components": [
+
+    {
+      "component_name": "pulse-dot",
+      "atomic_level": "atom",
+      "domain_context": "none",
+      "composed_of": [],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "pulse-dot",
+      "bem_elements": [],
+      "bem_modifiers": ["pulse-dot--online", "pulse-dot--offline", "pulse-dot--warning"],
+      "inputs": {
+        "isOnline": "boolean — estado de conexión del vehículo",
+        "size": "'sm' | 'md' — default: 'md' (9px | 12px)"
+      },
+      "outputs": {},
+      "states": ["online", "offline"],
+      "edge_cases": [
+        "status undefined → render offline por defecto",
+        "prefers-reduced-motion → animation: none"
+      ],
+      "m3_tokens": [
+        "--color-online",
+        "--color-online-ring",
+        "--color-offline",
+        "--duration-medium"
+      ],
+      "wcag_criteria": ["1.4.1", "1.4.3"],
+      "wcag_notes": "aria-hidden=true siempre — el texto adyacente porta el significado",
+      "data_annotation": "data-atomic=\"atom\" data-component=\"PulseDot\"",
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": true,
+        "no_router": true,
+        "single_responsibility": true
+      },
+      "test_strategy": "snapshot + animation state",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "battery-bar",
+      "atomic_level": "atom",
+      "domain_context": "none",
+      "composed_of": [],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "battery-bar",
+      "bem_elements": ["battery-bar__track", "battery-bar__fill", "battery-bar__cap"],
+      "bem_modifiers": ["battery-bar--critical", "battery-bar--warning", "battery-bar--normal"],
+      "inputs": {
+        "level": "number — 0 a 100 (porcentaje)",
+        "showLabel": "boolean — mostrar texto '95%' — default: true"
+      },
+      "outputs": {},
+      "states": ["normal (≥40)", "warning (20-39)", "critical (<20)"],
+      "edge_cases": [
+        "level < 0 → render 0%",
+        "level > 100 → clamp a 100%",
+        "level null → render N/D"
+      ],
+      "m3_tokens": [
+        "--color-online",
+        "--color-warning",
+        "--color-danger",
+        "--md-sys-typescale-label-sm-size",
+        "--radius-xs"
+      ],
+      "wcag_criteria": ["1.3.1", "1.4.3", "4.1.2"],
+      "wcag_notes": "role=progressbar, aria-valuenow, aria-valuemin=0, aria-valuemax=100, aria-label descriptivo",
+      "data_annotation": "data-atomic=\"atom\" data-component=\"BatteryBar\"",
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": true,
+        "no_router": true,
+        "single_responsibility": true
+      },
+      "test_strategy": "unit: 3 estados (normal/warning/critical) + edge cases",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "theme-toggle",
+      "atomic_level": "atom",
+      "domain_context": "none",
+      "composed_of": [],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "theme-toggle",
+      "bem_elements": ["theme-toggle__icon", "theme-toggle__label"],
+      "bem_modifiers": ["theme-toggle--dark", "theme-toggle--light"],
+      "inputs": {
+        "theme": "'dark' | 'light'",
+        "onToggle": "() => void"
+      },
+      "outputs": {
+        "onClick": "() => void — notifica al padre/store el cambio"
+      },
+      "states": ["dark", "light", "focus", "hover", "active"],
+      "edge_cases": [
+        "sin localStorage disponible → default dark",
+        "sistema en dark → inicializar en dark"
+      ],
+      "m3_tokens": [
+        "--color-text-muted",
+        "--color-border-2",
+        "--color-accent",
+        "--radius-full",
+        "--md-sys-typescale-label-sm-size",
+        "--duration-short"
+      ],
+      "wcag_criteria": ["1.4.3", "2.1.1", "2.4.7", "4.1.2"],
+      "wcag_notes": "aria-label dinámico, aria-pressed, :focus-visible con outline 3px, min-height 44px (WCAG 2.5.5)",
+      "data_annotation": "data-atomic=\"atom\" data-component=\"ThemeToggle\"",
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": true,
+        "no_router": true,
+        "single_responsibility": true
+      },
+      "test_strategy": "unit: toggle dark→light, focus-visible, aria-pressed",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "device-item",
+      "atomic_level": "molecule",
+      "domain_context": "fleet-monitoring",
+      "composed_of": ["CategoryIcon (atom)", "StatusBadge (atom)", "VehicleLabel (atom)"],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "device-item",
+      "bem_elements": ["device-item__icon", "device-item__info", "device-item__name", "device-item__meta", "device-item__badge"],
+      "bem_modifiers": ["device-item--selected", "device-item--offline"],
+      "inputs": {
+        "device": "TraccarDevice — id, name, category, status, attributes",
+        "isSelected": "boolean",
+        "onClick": "() => void",
+        "onKeyDown": "(e: KeyboardEvent) => void"
+      },
+      "outputs": {
+        "onClick": "deviceId: number",
+        "onKeyDown": "Enter | Space → onClick"
+      },
+      "states": ["default", "selected", "offline", "hover", "focus"],
+      "edge_cases": [
+        "category undefined → emoji y color default",
+        "driver undefined → 'Sin conductor'",
+        "name muy largo → text-overflow: ellipsis"
+      ],
+      "m3_tokens": [
+        "--color-accent",
+        "--color-accent-dim",
+        "--color-online",
+        "--color-online-dim",
+        "--color-offline",
+        "--color-text",
+        "--color-text-muted",
+        "--color-border",
+        "--radius-md",
+        "--md-sys-typescale-body-sm-size",
+        "--md-sys-typescale-label-sm-size",
+        "--space-2",
+        "--space-3",
+        "--duration-short"
+      ],
+      "wcag_criteria": ["1.3.1", "1.4.3", "2.1.1", "2.4.7", "2.5.5", "4.1.2"],
+      "wcag_notes": "role=option, aria-selected, tabindex=0, min-height 44px, :focus-visible",
+      "data_annotation": "data-atomic=\"molecule\" data-component=\"DeviceItem\"",
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": true,
+        "no_router": true,
+        "single_responsibility": true
+      },
+      "test_strategy": "unit: estados selected/offline, keyboard Enter/Space, truncate largo",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "status-card",
+      "atomic_level": "organism",
+      "domain_context": "fleet-monitoring",
+      "composed_of": ["PulseDot (atom)", "BatteryBar (atom)", "AnimatedValue (atom)", "StatusCardSkeleton (molecule)"],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "status-card",
+      "bem_elements": [
+        "status-card__grid",
+        "status-card__item",
+        "status-card__term",
+        "status-card__value",
+        "status-card__sub",
+        "status-card__error-banner"
+      ],
+      "bem_modifiers": ["status-card--loading", "status-card--error", "status-card--empty"],
+      "inputs": {
+        "device": "TraccarDevice | null",
+        "position": "TraccarPosition | null",
+        "isLoading": "boolean",
+        "isError": "boolean",
+        "error": "string | null",
+        "lastSuccessTime": "number"
+      },
+      "outputs": {},
+      "states": ["empty", "loading", "error", "tracking"],
+      "edge_cases": [
+        "device sin batería → mostrar N/D",
+        "speed = 0 → mostrar 0.0 km/h",
+        "error con datos previos → mostrar datos + banner",
+        "sin conductor asignado → 'Sin conductor'"
+      ],
+      "m3_tokens": [
+        "--color-text",
+        "--color-text-muted",
+        "--color-accent",
+        "--color-danger",
+        "--color-danger-dim",
+        "--color-border",
+        "--color-surface",
+        "--radius-sm",
+        "--space-1", "--space-2", "--space-3", "--space-4",
+        "--md-sys-typescale-label-sm-size",
+        "--md-sys-typescale-label-md-size",
+        "--md-sys-typescale-title-md-size",
+        "--md-sys-typescale-headline-size"
+      ],
+      "wcag_criteria": ["1.3.1", "1.4.3", "2.1.1", "4.1.3"],
+      "wcag_notes": "dl/dt/dd estricto, aria-live=polite aria-atomic=false en dl, role=alert en error banner, aria-busy en skeleton",
+      "data_annotation": "data-atomic=\"organism\" data-component=\"StatusCard\"",
+      "responsive": {
+        "mobile": "grid 2 columnas",
+        "tablet_up": "grid 4 columnas",
+        "class": "status-card__grid--responsive"
+      },
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": false,
+        "no_router": true,
+        "single_responsibility": true,
+        "domain_state_justification": "Organismo — conecta a useSelectedDevice y useTraccarPosition hooks"
+      },
+      "test_strategy": "jest-axe: 4 estados, keyboard nav, aria-live announcements",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "device-selector",
+      "atomic_level": "organism",
+      "domain_context": "fleet-monitoring",
+      "composed_of": ["DeviceItem (molecule)", "SearchInput (atom)", "DeviceListSkeleton (molecule)", "ErrorRetry (molecule)"],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "device-selector",
+      "bem_elements": [
+        "device-selector__header",
+        "device-selector__label",
+        "device-selector__search",
+        "device-selector__list",
+        "device-selector__empty",
+        "device-selector__error"
+      ],
+      "bem_modifiers": ["device-selector--loading", "device-selector--error"],
+      "inputs": {
+        "onSelect": "() => void — callback tras selección (cierra sidebar mobile)"
+      },
+      "outputs": {
+        "onDeviceSelect": "deviceId: number → dispatch a Zustand store"
+      },
+      "states": ["loading", "error", "empty-search", "populated"],
+      "edge_cases": [
+        "0 dispositivos → mensaje vacío",
+        "búsqueda sin resultados → 'Sin resultados para X'",
+        "error de red → retry con aria-live assertive",
+        "nombre muy largo → ellipsis"
+      ],
+      "m3_tokens": [
+        "--color-surface",
+        "--color-surface-2",
+        "--color-border",
+        "--color-text",
+        "--color-text-muted",
+        "--space-2", "--space-3",
+        "--radius-md", "--radius-sm",
+        "--md-sys-typescale-label-sm-size",
+        "--md-sys-typescale-body-sm-size"
+      ],
+      "wcag_criteria": ["1.3.1", "2.1.1", "2.4.7", "4.1.2", "4.1.3"],
+      "wcag_notes": "ul role=listbox, li role=option, aria-selected, aria-controls en search, role=alert en error",
+      "data_annotation": "data-atomic=\"organism\" data-component=\"DeviceSelector\"",
+      "responsive": {
+        "mobile": "drawer fullscreen con overlay",
+        "tablet_up": "sidebar fija 240px",
+        "class": "app-sidebar"
+      },
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": false,
+        "no_router": true,
+        "single_responsibility": true,
+        "domain_state_justification": "Organismo — consume useDevices hook y Zustand store"
+      },
+      "test_strategy": "jest-axe: listbox navigation, search filter, error retry, keyboard",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "vehicle-map",
+      "atomic_level": "organism",
+      "domain_context": "fleet-monitoring",
+      "composed_of": ["Leaflet MapContainer (external)", "SVG VehicleMarker (atom)", "ErrorOverlay (molecule)"],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "vehicle-map",
+      "bem_elements": ["vehicle-map__container", "vehicle-map__marker", "vehicle-map__overlay", "vehicle-map__error"],
+      "bem_modifiers": ["vehicle-map--error", "vehicle-map--empty"],
+      "inputs": {
+        "position": "TraccarPosition | null",
+        "prevPosition": "TraccarPosition | null",
+        "device": "TraccarDevice | null",
+        "isError": "boolean"
+      },
+      "outputs": {},
+      "states": ["empty", "tracking", "error-stale"],
+      "edge_cases": [
+        "primer render → flyTo sin animación previa",
+        "error → opacity 0.6 + grayscale + banner",
+        "prefers-reduced-motion → sin interpolación rAF",
+        "SSR → dynamic import ssr:false obligatorio"
+      ],
+      "m3_tokens": [
+        "--color-surface",
+        "--color-border",
+        "--color-danger",
+        "--color-text",
+        "--color-text-muted",
+        "--radius-md",
+        "--duration-medium",
+        "--duration-long"
+      ],
+      "wcag_criteria": ["1.1.1", "2.3.3", "4.1.2"],
+      "wcag_notes": "role=application en contenedor, role=img en marcador SVG, aria-label con nombre+velocidad+dirección, prefers-reduced-motion desactiva rAF",
+      "data_annotation": "data-atomic=\"organism\" data-component=\"VehicleMap\"",
+      "responsive": {
+        "mobile": "height: 240px mínimo",
+        "tablet_up": "flex: 1 (ocupa el espacio restante)",
+        "note": "Leaflet maneja su propio responsive internamente"
+      },
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": false,
+        "no_router": true,
+        "single_responsibility": true,
+        "domain_state_justification": "Organismo — consume Zustand store para currentPosition y appState"
+      },
+      "test_strategy": "jest-axe: aria-label marcador, smoke test render, error state visual",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "app-header",
+      "atomic_level": "organism",
+      "domain_context": "navigation",
+      "composed_of": ["LogoMark (atom)", "ThemeToggle (atom)", "MobileMenuButton (atom)", "BrandLabel (molecule)"],
+      "api_calls": false,
+      "router_awareness": false,
+      "bem_block": "app-header",
+      "bem_elements": ["app-header__brand", "app-header__logo", "app-header__title", "app-header__controls", "app-header__menu-btn"],
+      "bem_modifiers": [],
+      "inputs": {
+        "onMenuClick": "() => void — abre sidebar mobile"
+      },
+      "outputs": {
+        "onMenuClick": "() => void"
+      },
+      "states": ["default"],
+      "edge_cases": [
+        "mobile: mostrar botón de menú hamburguesa",
+        "tablet+: ocultar botón de menú"
+      ],
+      "m3_tokens": [
+        "--color-surface",
+        "--color-border",
+        "--color-accent",
+        "--color-bg",
+        "--layout-header",
+        "--space-2", "--space-4",
+        "--md-sys-typescale-title-md-size",
+        "--radius-sm"
+      ],
+      "wcag_criteria": ["2.1.1", "2.4.1", "2.4.7", "4.1.2"],
+      "wcag_notes": "role=banner, skip link antes del header, ThemeToggle con aria-label y aria-pressed",
+      "data_annotation": "data-atomic=\"organism\" data-component=\"AppHeader\"",
+      "responsive": {
+        "mobile": "hamburger button visible",
+        "tablet_up": "hamburger button display:none"
+      },
+      "purity_check": {
+        "no_api_calls": true,
+        "no_domain_state": false,
+        "no_router": true,
+        "single_responsibility": true,
+        "domain_state_justification": "Organismo — lee theme de Zustand store via ThemeToggle"
+      },
+      "test_strategy": "unit: toggle theme, mobile menu button visibility, keyboard nav",
+      "gate_1_status": "PASS"
+    },
+
+    {
+      "component_name": "fleet-monitor-page",
+      "atomic_level": "page",
+      "domain_context": "fleet-monitoring",
+      "composed_of": ["AppHeader (organism)", "DeviceSelector (organism)", "VehicleMap (organism)", "StatusCard (organism)", "RoadmapPanel (organism)"],
+      "api_calls": false,
+      "router_awareness": true,
+      "bem_block": "fleet-monitor",
+      "bem_elements": ["fleet-monitor__layout", "fleet-monitor__main", "fleet-monitor__sidebar", "fleet-monitor__content", "fleet-monitor__map", "fleet-monitor__status"],
+      "bem_modifiers": [],
+      "inputs": {},
+      "outputs": {},
+      "states": ["idle", "loading", "tracking"],
+      "edge_cases": [
+        "sidebar cerrada en mobile → map ocupa 100%",
+        "sin vehículo seleccionado → status y mapa en estado empty"
+      ],
+      "m3_tokens": [
+        "--color-bg",
+        "--layout-header",
+        "--layout-sidebar",
+        "--layout-status-panel",
+        "--space-3", "--space-4"
+      ],
+      "wcag_criteria": ["2.4.1", "2.4.2", "3.1.1"],
+      "wcag_notes": "skip link, lang=es en html, main role, nav role en sidebar, section role en content",
+      "data_annotation": "data-atomic=\"page\" data-component=\"FleetMonitorPage\"",
+      "responsive": {
+        "mobile": "grid-template-columns: 1fr, sidebar como drawer",
+        "tablet": "grid-template-columns: 200px 1fr",
+        "desktop": "grid-template-columns: 240px 1fr",
+        "classes": "app-layout app-main app-sidebar app-content"
+      },
+      "purity_check": {
+        "no_api_calls": false,
+        "no_domain_state": false,
+        "no_router": false,
+        "single_responsibility": true,
+        "justification": "Página — conecta router, store y datos reales por definición"
+      },
+      "test_strategy": "E2E Playwright: flujo completo login→select→track, responsive 375/768/1024",
+      "gate_1_status": "PASS"
+    }
+  ],
+
+  "gate_1_summary": {
+    "total_components": 9,
+    "atoms": 3,
+    "molecules": 1,
+    "organisms": 4,
+    "pages": 1,
+    "all_pass": true,
+    "signed_by": ["ARCHITECT"],
+    "date": "2026-06-03",
+    "next": "FORGE — implementar estrictamente desde este SPEC"
+  }
+}
