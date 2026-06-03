@@ -1,3 +1,10 @@
+/**
+ * StatusCard — Organismo de telemetría del vehículo seleccionado.
+ * Usa <dl><dt><dd> estricto (WCAG 1.3.1).
+ * aria-live="polite" anuncia cambios de velocidad/estado al screen reader.
+ * 4 estados: empty | loading | error | tracking.
+ * @see ATOMIC_SPEC.json, QA_CHECKLIST.md
+ */
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useAppStore, useSelectedDevice } from '@/store/useAppStore'

@@ -6,6 +6,7 @@
 // CONVERSIÓN DE VELOCIDAD
 // ADR-001 — Traccar devuelve nudos, la UI muestra km/h
 // ============================================================
+/** Convierte velocidad de nudos a km/h. API Traccar devuelve nudos. */
 export function knotsToKmh(knots: number): number {
   return parseFloat((knots * 1.852).toFixed(1))
 }
@@ -14,6 +15,7 @@ export function knotsToKmh(knots: number): number {
 // TIEMPO RELATIVO (sin dependencia de date-fns para casos simples)
 // WCAG: texto legible para humanos en la StatusCard
 // ============================================================
+/** Formatea una fecha ISO como texto relativo legible. Ej: "Hace 30 segundos". */
 export function timeAgo(isoString: string): string {
   const seconds = Math.floor((Date.now() - new Date(isoString).getTime()) / 1000)
 
@@ -34,6 +36,7 @@ export function timeAgo(isoString: string): string {
 // CONVERSIÓN DE COURSE A CARDINAL
 // 0=N, 45=NE, 90=E, etc.
 // ============================================================
+/** Convierte rumbo en grados (0-360) a punto cardinal. Ej: 45° → "NE". */
 export function courseToCardinal(course: number): string {
   const directions = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO']
   const index = Math.round(((course % 360) + 360) % 360 / 45) % 8
@@ -44,8 +47,10 @@ export function courseToCardinal(course: number): string {
 // NIVEL DE BATERÍA — determina color semántico
 // Von Restorff: batería baja atrae atención inmediata
 // ============================================================
+/** Estado visual de la batería según nivel. Determina color del BatteryBar átomo. */
 export type BatteryState = 'critical' | 'warning' | 'normal'
 
+/** Clasifica nivel de batería en estado visual. < 20 = critical (Von Restorff). */
 export function getBatteryState(level: number): BatteryState {
   if (level < 20) return 'critical'
   if (level < 40) return 'warning'
@@ -56,6 +61,7 @@ export function getBatteryState(level: number): BatteryState {
 // INTERPOLACIÓN LINEAL — para marker smoothing
 // Calcula posición intermedia entre dos coordenadas
 // ============================================================
+/** Interpolación lineal entre dos valores. Usada para smooth marker movement (rAF). */
 export function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t
 }
@@ -65,6 +71,7 @@ export interface LatLng {
   lng: number
 }
 
+/** Interpola entre dos posiciones GPS. t=0 retorna from, t=1 retorna to. */
 export function interpolatePosition(from: LatLng, to: LatLng, t: number): LatLng {
   return {
     lat: lerp(from.lat, to.lat, t),
@@ -76,6 +83,7 @@ export function interpolatePosition(from: LatLng, to: LatLng, t: number): LatLng
 // PROXY URL — construye la URL al proxy de Netlify
 // ADR-004 — toda comunicación con Traccar pasa por aquí
 // ============================================================
+/** Construye URL al proxy Netlify de Traccar. ADR-004 — toda llamada pasa por aquí. */
 export function traccarUrl(path: string, params?: Record<string, string | number>): string {
   const base = '/.netlify/functions/traccar'
   const query = new URLSearchParams({ path, ...Object.fromEntries(
@@ -87,6 +95,7 @@ export function traccarUrl(path: string, params?: Record<string, string | number
 // ============================================================
 // CLASE CONDICIONAL — utility para componer clases CSS
 // ============================================================
+/** Combina clases CSS filtrando valores falsy. Utility para composición condicional. */
 export function cn(...classes: (string | boolean | undefined | null)[]): string {
   return classes.filter(Boolean).join(' ')
 }

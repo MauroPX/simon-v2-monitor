@@ -1,3 +1,9 @@
+/**
+ * VehicleMap — Organismo de mapa interactivo con Leaflet.
+ * Importar siempre con dynamic(..., { ssr: false }) — Leaflet requiere window.
+ * Implementa smooth marker movement via requestAnimationFrame.
+ * @see ADR-003, ADR-008, ATOMIC_SPEC.json
+ */
 'use client'
 import { useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'

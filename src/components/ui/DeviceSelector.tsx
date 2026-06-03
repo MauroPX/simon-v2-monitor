@@ -1,3 +1,10 @@
+/**
+ * DeviceSelector — Organismo de selección de vehículo.
+ * role=listbox con role=option por item (WCAG 4.1.2).
+ * Búsqueda en tiempo real — Ley de Hick: reduce tiempo de decisión.
+ * 4 estados: loading | error | empty-search | populated.
+ * @see ATOMIC_SPEC.json
+ */
 'use client'
 import { useState, KeyboardEvent } from 'react'
 import { useAppStore } from '@/store/useAppStore'

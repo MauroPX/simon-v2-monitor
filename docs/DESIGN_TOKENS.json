@@ -1,0 +1,66 @@
+{
+  "$version": "1.0.0",
+  "$description": "Design Tokens simon-v2-monitor — Simon Movilidad brand",
+  "$date": "2026-06-03",
+
+  "color": {
+    "brand": {
+      "primary":     { "$value": "#4EEAC4", "$description": "Verde Simón — acción, online, accent" },
+      "primary-dark":{ "$value": "#2AB894", "$description": "Verde Simón mid — hover, dark mode text accent" },
+      "primary-800": { "$value": "#0F6E56", "$description": "Verde oscuro — light mode primary (4.5:1 contraste)" },
+      "background":  { "$value": "#050505", "$description": "Negro marca — background dark mode" },
+      "surface":     { "$value": "#0d1117", "$description": "Surface dark mode" },
+      "surface-2":   { "$value": "#1A2535", "$description": "Surface variante dark mode" }
+    },
+    "semantic": {
+      "online":  { "$value": "#4EEAC4", "$description": "Vehículo conectado" },
+      "offline": { "$value": "#4B5563", "$description": "Vehículo desconectado" },
+      "warning": { "$value": "#F59E0B", "$description": "Batería 20-40%" },
+      "danger":  { "$value": "#EF4444", "$description": "Batería <20%, errores críticos" }
+    },
+    "category": {
+      "truck":      { "$value": "#ef4444" },
+      "car":        { "$value": "#4EEAC4" },
+      "motorcycle": { "$value": "#F59E0B" },
+      "bus":        { "$value": "#2AB894" },
+      "person":     { "$value": "#ec4899" },
+      "boat":       { "$value": "#06b6d4" },
+      "default":    { "$value": "#6366f1" }
+    }
+  },
+  "shape": {
+    "radius-xs":   { "$value": "4px" },
+    "radius-sm":   { "$value": "8px" },
+    "radius-md":   { "$value": "12px" },
+    "radius-lg":   { "$value": "16px" },
+    "radius-full": { "$value": "9999px" }
+  },
+  "spacing": {
+    "space-1":  { "$value": "4px" },
+    "space-2":  { "$value": "8px" },
+    "space-3":  { "$value": "12px" },
+    "space-4":  { "$value": "16px" },
+    "space-6":  { "$value": "24px" },
+    "space-12": { "$value": "48px" }
+  },
+  "typography": {
+    "label-sm":    { "$value": "11px" },
+    "label-md":    { "$value": "12px" },
+    "body-sm":     { "$value": "12px" },
+    "body-md":     { "$value": "14px" },
+    "title-md":    { "$value": "14px" },
+    "title-lg":    { "$value": "16px" },
+    "headline":    { "$value": "24px" }
+  },
+  "layout": {
+    "header":       { "$value": "48px" },
+    "sidebar":      { "$value": "240px" },
+    "status-panel": { "$value": "220px" }
+  },
+  "motion": {
+    "duration-short":  { "$value": "200ms" },
+    "duration-medium": { "$value": "300ms" },
+    "duration-long":   { "$value": "500ms" },
+    "ease-standard":   { "$value": "cubic-bezier(0.2, 0, 0, 1)" }
+  }
+}

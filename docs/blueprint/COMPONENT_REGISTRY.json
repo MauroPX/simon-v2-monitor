@@ -1,0 +1,117 @@
+{
+  "$version": "1.0.0",
+  "$project": "simon-v2-monitor",
+  "$date": "2026-06-03",
+  "$description": "Registro inmutable de componentes en estado LOCK. Cualquier modificación requiere RFC.",
+
+  "components": {
+    "PulseDot": {
+      "version": "1.0.0",
+      "atomic_level": "atom",
+      "status": "LOCKED",
+      "bem_block": "pulse-dot",
+      "locked_date": "2026-06-03",
+      "dependents": ["StatusCard"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "BatteryBar": {
+      "version": "1.0.0",
+      "atomic_level": "atom",
+      "status": "LOCKED",
+      "bem_block": "battery-bar",
+      "locked_date": "2026-06-03",
+      "dependents": ["StatusCard"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "ThemeToggle": {
+      "version": "1.0.0",
+      "atomic_level": "atom",
+      "status": "LOCKED",
+      "bem_block": "theme-toggle",
+      "locked_date": "2026-06-03",
+      "dependents": ["AppHeader"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "DeviceItem": {
+      "version": "1.0.0",
+      "atomic_level": "molecule",
+      "status": "LOCKED",
+      "bem_block": "device-item",
+      "locked_date": "2026-06-03",
+      "dependents": ["DeviceSelector"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "StatusCard": {
+      "version": "1.0.0",
+      "atomic_level": "organism",
+      "status": "LOCKED",
+      "bem_block": "status-card",
+      "locked_date": "2026-06-03",
+      "dependents": ["FleetMonitorPage"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "DeviceSelector": {
+      "version": "1.0.0",
+      "atomic_level": "organism",
+      "status": "LOCKED",
+      "bem_block": "device-selector",
+      "locked_date": "2026-06-03",
+      "dependents": ["FleetMonitorPage"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "VehicleMap": {
+      "version": "1.0.0",
+      "atomic_level": "organism",
+      "status": "LOCKED",
+      "bem_block": "vehicle-map",
+      "locked_date": "2026-06-03",
+      "dependents": ["FleetMonitorPage"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "AppHeader": {
+      "version": "1.0.0",
+      "atomic_level": "organism",
+      "status": "LOCKED",
+      "bem_block": "app-header",
+      "locked_date": "2026-06-03",
+      "dependents": ["FleetMonitorPage"],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    },
+    "FleetMonitorPage": {
+      "version": "1.0.0",
+      "atomic_level": "page",
+      "status": "LOCKED",
+      "bem_block": "fleet-monitor",
+      "locked_date": "2026-06-03",
+      "dependents": [],
+      "gate_1": "PASS",
+      "gate_2": "PASS",
+      "gate_3": "PASS"
+    }
+  },
+
+  "gate_3_summary": {
+    "total": 9,
+    "locked": 9,
+    "pending": 0,
+    "signed_by": "ARCHITECT",
+    "date": "2026-06-03",
+    "note": "Modificaciones futuras requieren RFC vía /immutability rfc [componente]"
+  }
+}

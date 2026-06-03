@@ -1,7 +1,9 @@
 'use client'
 import { useAppStore } from '@/store/useAppStore'
 
+/** Props del organismo AppHeader. */
 interface AppHeaderProps {
+  /** Callback para abrir/cerrar el sidebar en viewport mobile (< 768px). */
   onMenuClick?: () => void
 }
 
