@@ -68,7 +68,7 @@ export default function HomePage() {
             aria-label="Lista de vehículos de la flota"
             data-atomic="organism"
           >
-            <DeviceSelector onSelect={() => setSidebarOpen(false)} />
+            <DeviceSelector />
           </nav>
 
           {/* TEMPLATE — Content area */}

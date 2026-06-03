@@ -14,8 +14,8 @@ import { knotsToKmh, courseToCardinal, interpolatePosition, type LatLng } from '
 import type { TraccarPosition } from '@/types/traccar'
 
 const CAT_COLOR: Record<string,string> = {
-  truck:var(--color-cat-truck, #ef4444), car:var(--color-cat-car, #4EEAC4), motorcycle:var(--color-cat-motorcycle, #F59E0B),
-  bus:var(--color-cat-bus, #2AB894), person:var(--color-cat-person, #ec4899), boat:var(--color-cat-boat, #06b6d4), default:var(--color-cat-default, #6366f1)
+  truck: '#ef4444', car: '#4EEAC4', motorcycle: '#F59E0B',
+  bus: '#2AB894', person: '#ec4899', boat: '#06b6d4', default: '#6366f1',
 }
 
 function MarkerController({ position, device }:
@@ -32,7 +32,7 @@ function MarkerController({ position, device }:
     if (!position || !device) return
     const color = CAT_COLOR[device.category ?? 'default'] ?? CAT_COLOR.default
     const isOffline = device.status === 'offline'
-    const fill = isOffline ? var(--color-offline) : color
+    const fill = isOffline ? '#64748b' : color
     const opacity = isOffline ? '0.5' : '1'
     const svgHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 28 28" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4))">
       <polygon points="14,2 22,24 14,20 6,24" fill="${fill}" stroke="white" stroke-width="1.5" opacity="${opacity}"/>
