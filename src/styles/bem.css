@@ -633,7 +633,7 @@
    BEM: .roadmap-panel — organism
    Panel flotante con las 4 capas evolutivas del producto
    ══════════════════════════════════════════════════════════════ */
-.roadmap-panel { position: fixed; bottom: 16px; right: 16px; z-index: 50; }
+.roadmap-panel { position: fixed; bottom: 24px; right: 24px; z-index: 200; }
 .roadmap-panel__trigger {
   display: flex;
   align-items: center;
