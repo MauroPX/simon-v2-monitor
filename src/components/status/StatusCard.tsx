@@ -78,7 +78,7 @@ export function StatusCard() {
 
   const speed    = pos ? Math.round(knotsToKmh(pos.speed)) : 0
   const heading  = pos ? courseToCardinal(pos.course) : '—'
-  const batPct   = (device as any)?.attributes?.batteryLevel ?? null
+  const batPct   = (device as any)?.attributes?.batteryLevel ?? (device as any)?.attributes?.battery ?? null
   const batState = batPct !== null ? getBatteryState(batPct) : null
   const isOnline = device?.status === 'online'
   const batClass = batState==='critical'?'critical':batState==='warning'?'low':'good'
