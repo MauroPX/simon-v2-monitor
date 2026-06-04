@@ -1,0 +1,696 @@
+/* ══════════════════════════════════════════════════════════════
+   BEM COMPONENTS — simon-v2-monitor DS v3.0
+   Archivo separado para evitar purge de Tailwind en producción.
+   Importado directamente en layout.tsx.
+
+   NOMENCLATURA: .bloque__elemento--modificador
+   ATOMIC SPEC: pulse-dot · battery-bar · theme-toggle · device-item
+                status-card · device-selector · vehicle-map
+                app-header · fleet-monitor-page
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── NIVEL 1 — Reference Tokens Simon Movilidad (M3) ── */
+:root {
+  /* Paleta Simon — valores exactos del CSS de producción */
+  --ref-simon-primary:     #00ffc2;   /* --primary en simonmovilidad.com */
+  --ref-simon-secondary:   #19b5ff;   /* --secondary */
+  --ref-simon-success:     #2ad67a;   /* --success */
+  --ref-simon-warning:     #ffb547;   /* --warning */
+  --ref-simon-error:       #ff4d4d;   /* --destructive */
+
+  /* Superficies dark */
+  --ref-dark-bg:       #080808;
+  --ref-dark-surface:  #0c0c12;
+  --ref-dark-card:     #111118;
+  --ref-dark-fg:       #f5f7fa;
+  --ref-dark-muted-fg: #a7b4c2;
+  --ref-dark-border:   #ffffff14;
+
+  /* Superficies light */
+  --ref-light-bg:       #f7fafc;
+  --ref-light-surface:  #f1f6fa;
+  --ref-light-card:     #ffffff;
+  --ref-light-fg:       #0f1722;
+  --ref-light-muted-fg: #4b5b6b;
+  --ref-light-border:   #d8e2ec;
+  --ref-light-primary:  #00cfc0;
+
+  /* Tipescale M3 — aliases semánticos */
+  --md-sys-typescale-label-sm-size:  11px;
+  --md-sys-typescale-label-md-size:  12px;
+  --md-sys-typescale-body-sm-size:   12px;
+  --md-sys-typescale-body-md-size:   14px;
+  --md-sys-typescale-title-md-size:  14px;
+  --md-sys-typescale-title-lg-size:  16px;
+
+  /* Layout */
+  --layout-header:       48px;
+  --layout-sidebar:      240px;
+  --layout-status-panel: 220px;
+
+  /* Categorías de vehículos — mapeadas a paleta Simon */
+  --color-cat-truck:      #ef4444;
+  --color-cat-car:        #00ffc2;   /* verde Simon primario */
+  --color-cat-motorcycle: #ffb547;   /* warning Simon */
+  --color-cat-bus:        #2ad67a;   /* success Simon */
+  --color-cat-person:     #ec4899;
+  --color-cat-boat:       #19b5ff;   /* secondary Simon */
+  --color-cat-default:    #6366f1;
+
+  /* Indicadores de capa — RoadmapPanel */
+  --color-layer-1-mock:   #00ffc2;
+  --color-layer-2-demo:   #19b5ff;
+  --color-layer-3-mvp:    #ffb547;
+  --color-layer-4-legacy: #a7b4c2;
+
+  /* Capa 2 — Estados de conexión Traccar */
+  --color-connecting:     #ffb547;
+  --color-connecting-dim: rgba(255,181,71,0.14);
+  --color-stale:          #a7b4c2;
+  --color-stale-dim:      rgba(167,180,194,0.14);
+}
+
+/* ── NIVEL 2 — System Tokens DARK (default — operadores 24/7) ── */
+:root,
+[data-theme="dark"] {
+  --color-primary:             #00ffc2;
+  --color-on-primary:          #003d2e;
+  --color-secondary:           #19b5ff;
+  --color-error:               #ff4d4d;
+
+  /* M3 Surface container roles — jerarquía de énfasis visual */
+  --color-surface-container-lowest:  #030305;
+  --color-surface-container-low:     #080808;   /* fondo de página */
+  --color-surface-container:         #0c0c12;   /* cards, panels DEFAULT */
+  --color-surface-container-high:    #111118;   /* nested cards */
+  --color-surface-container-highest: #1a1a24;   /* selected, hover */
+
+  --color-on-surface:         #f5f7fa;
+  --color-on-surface-variant: #a7b4c2;
+  --color-outline:            rgba(255,255,255,0.35);
+  --color-outline-variant:    #ffffff14;
+
+  /* Aliases semánticos */
+  --color-bg:         #080808;
+  --color-surface:    #0c0c12;
+  --color-surface-2:  #111118;
+  --color-surface-3:  #1a1a24;
+  --color-text:       #f5f7fa;
+  --color-text-muted: #a7b4c2;
+  --color-accent:     #00ffc2;
+  --color-accent-dim: rgba(0,255,194,0.14);
+  --color-border:     #ffffff14;
+  --color-border-2:   rgba(255,255,255,0.35);
+  --color-border-focus: #00ffc2;
+
+  /* Estado de conexión */
+  --color-online:      #00ffc2;
+  --color-online-dim:  rgba(0,255,194,0.12);
+  --color-online-ring: rgba(0,255,194,0.35);
+  --color-offline:     #4b5b6b;
+  --color-offline-dim: rgba(75,91,107,0.18);
+
+  /* Semánticos */
+  --color-warning:     #ffb547;
+  --color-warning-dim: rgba(255,181,71,0.14);
+  --color-danger:      #ff4d4d;
+  --color-danger-dim:  rgba(255,77,77,0.14);
+  --color-success:     #2ad67a;
+  --color-success-dim: rgba(42,214,122,0.14);
+
+  --focus-ring: 0 0 0 3px rgba(0,255,194,0.45);
+}
+
+/* ── NIVEL 2 — System Tokens LIGHT ── */
+[data-theme="light"] {
+  --color-primary:   #00cfc0;
+  --color-on-primary:#ffffff;
+  --color-secondary: #0284c7;
+  --color-error:     #dc2626;
+
+  /* M3 Surface container roles light */
+  --color-surface-container-lowest:  #ffffff;
+  --color-surface-container-low:     #f7fafc;
+  --color-surface-container:         #f1f6fa;
+  --color-surface-container-high:    #e8edf2;
+  --color-surface-container-highest: #dde3ea;
+
+  --color-on-surface:         #0f1722;
+  --color-on-surface-variant: #4b5b6b;
+  --color-outline:            rgba(0,0,0,0.30);
+  --color-outline-variant:    #d8e2ec;
+
+  --color-bg:         #f7fafc;
+  --color-surface:    #ffffff;
+  --color-surface-2:  #f1f6fa;
+  --color-surface-3:  #e8edf2;
+  --color-text:       #0f1722;
+  --color-text-muted: #4b5b6b;
+  --color-accent:     #00cfc0;
+  --color-accent-dim: rgba(0,207,192,0.10);
+  --color-border:     #d8e2ec;
+  --color-border-2:   rgba(0,0,0,0.30);
+  --color-border-focus: #00cfc0;
+
+  --color-online:      #009688;
+  --color-online-dim:  rgba(0,150,136,0.10);
+  --color-online-ring: rgba(0,150,136,0.30);
+  --color-offline:     #9ca3af;
+  --color-warning:     #d97706;
+  --color-warning-dim: rgba(217,119,6,0.12);
+  --color-danger:      #dc2626;
+  --color-danger-dim:  rgba(220,38,38,0.10);
+  --color-success:     #16a34a;
+  --color-success-dim: rgba(22,163,74,0.10);
+
+  --focus-ring: 0 0 0 3px rgba(0,207,192,0.40);
+  --color-connecting: #d97706;
+  --color-stale:      #64748b;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ANIMACIONES GLOBALES
+   WCAG 2.3.3: prefers-reduced-motion desactiva todas
+   ══════════════════════════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 var(--color-online-ring); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes speed-highlight {
+  /* Micro-interacción: velocidad cambia de acento a texto normal */
+  0%   { color: var(--color-accent); transform: scale(1.08); }
+  100% { color: var(--color-text);   transform: scale(1); }
+}
+
+/* Shimmer usa surface containers M3 para jerarquía correcta */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container)      25%,
+    var(--color-surface-container-high) 50%,
+    var(--color-surface-container)      75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ── WCAG 2.4.1 — Skip link ── */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-radius: 4px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+}
+.skip-link:focus {
+  left: 16px;
+  outline: 3px solid var(--color-bg);
+  outline-offset: 2px;
+}
+
+/* ── Atomic Design debug — activar con document.body.classList.add('debug-atomic') ── */
+.debug-atomic [data-atomic="atom"]     { outline: 1px dashed var(--color-layer-1-mock); }
+.debug-atomic [data-atomic="molecule"] { outline: 1px dashed var(--color-layer-2-demo); }
+.debug-atomic [data-atomic="organism"] { outline: 1px dashed var(--color-layer-3-mvp); }
+.debug-atomic [data-atomic="template"] { outline: 1px dashed var(--ref-simon-error); }
+.debug-atomic [data-atomic="page"]     { outline: 1px dashed var(--color-layer-4-legacy); }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYOUT RESPONSIVE — Mobile first
+   Gap D: sidebar colapsable en mobile
+   ══════════════════════════════════════════════════════════════ */
+
+/* Contenedor raíz — ocupa todo el viewport */
+.app-layout {
+  display: grid;
+  grid-template-rows: var(--layout-header) 1fr;
+  height: 100dvh;
+  background: var(--color-surface-container-low);
+  overflow: hidden;
+}
+
+/* Desktop: sidebar fija + contenido */
+.app-main {
+  display: grid;
+  grid-template-columns: var(--layout-sidebar) 1fr;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar — drawer en mobile, fija en desktop */
+.app-sidebar {
+  background: var(--color-surface-container);
+  border-right: 1px solid var(--color-outline-variant);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 300ms cubic-bezier(0.2,0,0,1);
+}
+
+/* Área de contenido — mapa + status card */
+.app-content {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Mobile — sidebar como drawer deslizante */
+@media (max-width: 768px) {
+  .app-main { grid-template-columns: 1fr; }
+  .app-sidebar {
+    position: fixed;
+    top: var(--layout-header);
+    left: 0;
+    width: min(280px, 85vw);
+    height: calc(100dvh - var(--layout-header));
+    z-index: 40;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  }
+  .app-sidebar.open { transform: translateX(0); }
+  /* Botón hamburguesa visible solo en mobile */
+  .app-header__menu-btn { display: flex !important; }
+}
+
+/* Panel de status card — altura fija en desktop, auto en mobile */
+.status-panel-mobile {
+  background: var(--color-surface-container);
+  border-top: 1px solid var(--color-outline-variant);
+  padding: 12px 16px;
+  height: var(--layout-status-panel);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .status-panel-mobile { height: auto; max-height: 180px; }
+  /* StatusCard: 2 columnas en mobile en lugar de 4 */
+  .status-card__grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .app-header — organism
+   WCAG 2.4.1: contiene el skip link
+   ══════════════════════════════════════════════════════════════ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--color-outline-variant);
+  background: var(--color-surface-container);
+  height: var(--layout-header);
+  flex-shrink: 0;
+}
+.app-header__left { display: flex; align-items: center; gap: 8px; }
+/* Oculto en desktop, visible en mobile vía media query */
+.app-header__menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 18px;
+  min-height: 44px;  /* WCAG 2.5.8 — touch target */
+  min-width: 44px;
+}
+.app-header__logo {
+  width: 28px;
+  height: 28px;
+  background: var(--color-accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.app-header__brand { font-size: 14px; font-weight: 500; color: var(--color-text); }
+.app-header__brand-sub { color: var(--color-text-muted); font-weight: 400; }
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .theme-toggle — atom
+   WCAG 1.3.3: aria-pressed comunica estado, no solo el color
+   ══════════════════════════════════════════════════════════════ */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--color-border-2);
+  color: var(--color-text-muted);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: border-color 200ms;
+  min-height: 32px;
+}
+.theme-toggle:hover { border-color: var(--color-accent); }
+.theme-toggle__label { font-size: 11px; }
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .device-selector — organism
+   WCAG 1.3.1: role=listbox + aria-label en el contenedor
+   ══════════════════════════════════════════════════════════════ */
+.device-selector {
+  background: var(--color-surface-container);
+  border-right: 1px solid var(--color-outline-variant);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+.device-selector__header {
+  padding: 12px 12px 8px;
+  border-bottom: 1px solid var(--color-outline-variant);
+  flex-shrink: 0;
+}
+.device-selector__count {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+.device-selector__search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.device-selector__search-icon { font-size: 12px; flex-shrink: 0; }
+.device-selector__search {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  font-size: 12px;
+  width: 100%;
+}
+.device-selector__search::placeholder { color: var(--color-text-muted); }
+.device-selector__list { flex: 1; overflow-y: auto; padding: 8px 0; }
+.device-selector__empty {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 24px;
+}
+.device-selector__error {
+  font-size: 12px;
+  color: var(--color-danger);
+  padding: 16px 12px;
+  background: var(--color-danger-dim);
+  margin: 8px;
+  border-radius: 8px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .device-item — molecule
+   WCAG 2.1.1: Enter + Space activan selección
+   WCAG 2.5.8: min-height 44px en touch
+   ══════════════════════════════════════════════════════════════ */
+.device-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin: 0 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 200ms, border-color 200ms;
+  min-height: 44px;
+}
+.device-item:hover { background: var(--color-surface-container-high); }
+/* Estado: seleccionado — borde primario + fondo elevado */
+.device-item--selected {
+  background: var(--color-surface-container-highest);
+  border-color: var(--color-primary);
+}
+/* Estado: offline — opacidad reducida */
+.device-item--offline { opacity: .7; }
+/* Estado: skeleton — sin interacción */
+.device-item--skeleton { pointer-events: none; }
+.device-item__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.device-item__emoji { font-size: 16px; }
+.device-item__info { flex: 1; min-width: 0; }
+.device-item__name {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.device-item__meta {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.device-item__badge { font-size: 10px; font-weight: 600; flex-shrink: 0; white-space: nowrap; }
+.device-item__badge--online  { color: var(--color-online); }
+.device-item__badge--offline { color: var(--color-offline); }
+/* Shimmer para estado skeleton */
+.device-item__shimmer-name { height: 10px; width: 80%; border-radius: 4px; margin-bottom: 4px; }
+.device-item__shimmer-meta { height: 8px;  width: 60%; border-radius: 4px; }
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .status-card — organism
+   WCAG 1.3.1: dl/dt/dd para pares etiqueta-valor
+   WCAG 4.1.3: aria-live=polite para actualizaciones en tiempo real
+   ══════════════════════════════════════════════════════════════ */
+.status-card {
+  height: 100%;
+  background: var(--color-surface-container);
+  border-top: 1px solid var(--color-outline-variant);
+  padding: 16px;
+  overflow: hidden;
+}
+/* Grid de 4 columnas: vehículo · estado · velocidad · batería */
+.status-card__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.status-card__cell  { display: flex; flex-direction: column; gap: 4px; }
+.status-card__label { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--color-text-muted); }
+.status-card__value { font-size: 16px; font-weight: 500; color: var(--color-text); display: flex; align-items: center; gap: 8px; }
+.status-card__unit  { font-size: 12px; color: var(--color-text-muted); }
+.status-card__sub   { font-size: 11px; color: var(--color-text-muted); }
+
+/* Indicador de pulso — WCAG 1.3.3: no depende solo del color */
+.status-card__dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.status-card__dot--online  { background: var(--color-online); animation: pulse-ring 2s infinite; }
+.status-card__dot--offline { background: var(--color-offline); }
+
+/* Barra de batería — role=progressbar con aria-valuenow */
+.status-card__battery {
+  width: 48px;
+  height: 8px;
+  background: var(--color-surface-container-high);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.status-card__battery-fill { height: 100%; border-radius: 4px; transition: width 300ms; }
+.status-card__battery--good     .status-card__battery-fill { background: var(--color-success); }
+.status-card__battery--low      .status-card__battery-fill { background: var(--color-warning); }
+.status-card__battery--critical .status-card__battery-fill { background: var(--color-danger); }
+
+/* Shimmer del skeleton */
+.status-card__shimmer--label { height: 10px; width: 60%; border-radius: 4px; margin-bottom: 4px; }
+.status-card__shimmer--value { height: 18px; width: 80%; border-radius: 4px; }
+.status-card--loading .status-card__grid { align-items: start; }
+
+/* Estados: empty y error centrados */
+.status-card--empty,
+.status-card--error { display: flex; align-items: center; justify-content: center; }
+.status-card__empty-msg { color: var(--color-text-muted); font-size: 12px; }
+
+/* Error state con retry — Gap A */
+.status-card__error-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+}
+.status-card__error-icon  { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.status-card__error-msg   { font-size: 12px; color: var(--color-danger); font-weight: 500; margin-bottom: 4px; }
+.status-card__error-sub   { font-size: 11px; color: var(--color-text-muted); line-height: 1.4; }
+/* Botón retry — WCAG 2.5.8: min-height 44px */
+.status-card__retry-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: var(--color-danger-dim);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 200ms;
+  min-height: 44px;
+  white-space: nowrap;
+}
+.status-card__retry-btn:hover { background: var(--color-danger); color: var(--color-bg); }
+
+/* Micro-interacción velocidad — Gap E */
+.status-card__speed-value { display: inline-block; transition: color 200ms; }
+.status-card__value--highlight .status-card__speed-value {
+  animation: speed-highlight 300ms cubic-bezier(0.2,0,0,1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-card__value--highlight .status-card__speed-value { animation: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .vehicle-map — organism
+   WCAG 1.1.1: aria-label en el mapa con posición del vehículo
+   ══════════════════════════════════════════════════════════════ */
+.vehicle-map { position: relative; height: 100%; }
+.vehicle-map__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+.vehicle-map__overlay-msg {
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.vehicle-map__error {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  padding: 12px 24px;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-danger);
+  border-radius: 12px;
+  color: var(--color-danger);
+  font-size: 12px;
+}
+.vehicle-map__retry-btn {
+  margin-top: 12px;
+  background: var(--color-danger-dim);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 200ms;
+}
+.vehicle-map__retry-btn:hover { background: var(--color-danger); color: var(--color-bg); }
+
+/* ══════════════════════════════════════════════════════════════
+   BEM: .roadmap-panel — organism
+   Panel flotante con las 4 capas evolutivas del producto
+   ══════════════════════════════════════════════════════════════ */
+.roadmap-panel { position: fixed; bottom: 16px; right: 16px; z-index: 50; }
+.roadmap-panel__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  color: var(--color-text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 200ms;
+}
+.roadmap-panel__trigger:hover { border-color: var(--color-accent); }
+.roadmap-panel__trigger-label { font-size: 11px; }
+.roadmap-panel__content {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.roadmap-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+.roadmap-panel__title  { font-size: 12px; font-weight: 700; color: var(--color-text); }
+.roadmap-panel__close  { background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; }
+.roadmap-panel__layers { padding: 8px 0; max-height: 400px; overflow-y: auto; }
+.roadmap-layer { border-bottom: 1px solid var(--color-outline-variant); }
+.roadmap-layer:last-child { border-bottom: none; }
+.roadmap-layer__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 200ms;
+}
+.roadmap-layer__header:hover { background: var(--color-surface-container-highest); }
+.roadmap-layer__dot    { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.roadmap-layer__label  { font-size: 10px; font-weight: 700; letter-spacing: .05em; color: var(--color-text-muted); }
+.roadmap-layer__name   { font-size: 12px; font-weight: 500; color: var(--color-text); flex: 1; }
+.roadmap-layer__status { font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.roadmap-layer__detail { padding: 0 16px 12px; }
+.roadmap-layer__desc   { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 8px; }
+.roadmap-layer__items  { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.roadmap-layer__item   { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--color-text-muted); }
+.roadmap-layer__item-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
