@@ -1,0 +1,27 @@
+{
+  "project": "simon-v2-monitor",
+  "version": "1.0.0",
+  "layer": "Capa 1 Mock",
+  "url": "https://simon-monitor-test.netlify.app",
+  "released_at": "2026-06-04T07:01:44.490156+00:00",
+  "gate_2": "PASS 11/12 c\u00f3digo \u2014 \u00edtem 8 pendiente axe-cli manual",
+  "wcag_level": "AAA",
+  "ds_version": "v3.0",
+  "components_locked": [
+    "pulse-dot",
+    "battery-bar",
+    "theme-toggle",
+    "device-item",
+    "status-card",
+    "device-selector",
+    "vehicle-map",
+    "app-header",
+    "fleet-monitor-page"
+  ],
+  "signed_by": {
+    "ARCHITECT": "Claude",
+    "INQUISITOR": "BLIND_REVIEW_GATE2.md",
+    "CRAFTSMAN": "Claude",
+    "OBSERVER": "Claude"
+  }
+}

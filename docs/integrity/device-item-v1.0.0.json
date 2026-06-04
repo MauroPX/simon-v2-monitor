@@ -1,0 +1,16 @@
+{
+  "component": "device-item",
+  "atomic_level": "molecule",
+  "version": "1.0.0",
+  "bem_block": "device-item",
+  "wcag_level": "AAA",
+  "m3_tokens_clean": true,
+  "bem_complete": true,
+  "jsdoc_complete": true,
+  "tests_pass": true,
+  "blind_review": "PASS",
+  "gate_2": "PASS",
+  "gate_3": "PASS",
+  "locked_at": "2026-06-04T07:01:44.490156+00:00",
+  "layer": "Capa 1 Mock"
+}

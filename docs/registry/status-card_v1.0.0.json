@@ -1,0 +1,11 @@
+{
+  "component": "status-card",
+  "version": "1.0.0",
+  "atomic_level": "organism",
+  "bem_block": "status-card",
+  "release_date": "2026-06-04T07:01:44.490156+00:00",
+  "momentum": "M3",
+  "layer": "Capa 1 Mock",
+  "url": "https://simon-monitor-test.netlify.app",
+  "breaking_changes": false
+}

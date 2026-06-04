@@ -3,15 +3,9 @@
 // ThemeScript inline evita flash of wrong theme (FOWT)
 
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import { Providers } from './providers'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'FleetControl — Monitor de Vehículo en Tiempo Real',
@@ -36,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={inter.variable}>
+      <body className="font-sans">
         <Providers>{children}</Providers>
       </body>
     </html>

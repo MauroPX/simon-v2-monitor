@@ -1,0 +1,11 @@
+{
+  "component": "fleet-monitor-page",
+  "version": "1.0.0",
+  "atomic_level": "page",
+  "bem_block": "fleet-monitor-page",
+  "release_date": "2026-06-04T07:01:44.490156+00:00",
+  "momentum": "M3",
+  "layer": "Capa 1 Mock",
+  "url": "https://simon-monitor-test.netlify.app",
+  "breaking_changes": false
+}
