@@ -11,6 +11,11 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'class', // ADR-002: toggle via clase .dark en <html>
+  safelist: [
+    { pattern: /^(app|device|status|vehicle|theme|pulse|roadmap|fleet)-(header|item|card|map|toggle|dot|panel|monitor|selector|sidebar|main|layout|content|layer)/ },
+    { pattern: /__(left|right|logo|brand|sub|menu-btn|grid|cell|label|value|unit|sub|dot|battery|fill|shimmer|error|empty|retry|speed|icon|info|name|meta|badge|header|count|search|wrap|list|empty|error|trigger|content|title|close|layers|detail|desc|items|item|overlay|msg|inner|panel)/ },
+    { pattern: /--(online|offline|selected|skeleton|loading|error|empty|tracking|good|low|critical|open|expanded|live|next|roadmap|future|highlight|dark|light)/ },
+  ],
   theme: {
     extend: {
       // Colores semánticos que mapean a CSS vars M3
