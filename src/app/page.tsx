@@ -19,10 +19,10 @@ export default function HomePage() {
       <a href="#main-content" style={{position:'absolute',left:'-9999px',zIndex:9999,padding:'8px 16px',background:'var(--color-accent)',color:'var(--color-bg)',borderRadius:4,fontSize:14,textDecoration:'none',fontWeight:500}} onFocus={e=>{e.currentTarget.style.left='8px';e.currentTarget.style.top='8px'}} onBlur={e=>{e.currentTarget.style.left='-9999px'}}>
         Saltar al contenido principal
       </a>
-      <div style={{display:'grid',gridTemplateRows:'48px 1fr',height:'100dvh',background:'var(--color-bg)',overflow:'hidden'}}>
+      <div style={{display:'grid',gridTemplateRows:'48px 1fr',height:'100dvh',background:'var(--color-surface-container-low)',overflow:'hidden'}}>
         <AppHeader />
         <main id="main-content" role="main" style={{display:'grid',gridTemplateColumns:'240px 1fr',overflow:'hidden'}}>
-          <nav style={{background:'var(--color-surface)',borderRight:'1px solid var(--color-border)',display:'flex',flexDirection:'column',overflow:'hidden'}}>
+          <nav style={{background:'var(--color-surface-container)',borderRight:'1px solid var(--color-outline-variant)',display:'flex',flexDirection:'column',overflow:'hidden'}}>
             <DeviceSelector />
           </nav>
           <section style={{display:'grid',gridTemplateRows:'1fr 220px',overflow:'hidden'}}>

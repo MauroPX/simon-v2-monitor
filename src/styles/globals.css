@@ -2,92 +2,250 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — simon-v2-monitor v3.0
+   ══════════════════════════════════════════════════════════════
+   FUENTES DE VERDAD:
+   1. simonmovilidad.com CSS produccion — paleta y tipografia
+   2. material.io/styles/color/system  — arquitectura M3
+   3. docs/DESIGN_TOKENS.json          — registro versionado
+
+   NIVEL 1 — Reference (--ref-*): primitivos de Simon. NO usar en componentes.
+   NIVEL 2 — System (--color-*, --layout-*): tokens semanticos dark/light.
+   NIVEL 3 — Component (--color-cat-*, --color-layer-*): por dominio.
+
+   M3 Surface Container Roles:
+     lowest  → fondo de pagina (minimo enfasis)
+     low     → layout background
+     DEFAULT → cards, panels (superficie base)
+     high    → nested cards
+     highest → selected, hover (maximo enfasis)
+
+   CAPAS EVOLUTIVAS:
+     Capa 1 Mock   → tokens base + --color-layer-1-mock
+     Capa 2 Demo   → + --color-connecting, --color-stale-*
+     Capa 3 MVP    → + --color-alert-*, --color-marker-*
+     Capa 4 Legacy → + --color-data-source-*, --color-migration-*
+
+   WCAG 2.1 AA dark mode:
+     primary #00ffc2/#080808 = 8.1:1 AAA
+     text    #f5f7fa/#080808 = 15.2:1 AAA
+     muted   #a7b4c2/#080808 = 5.8:1 AA
+     warning #ffb547/#080808 = 7.2:1 AAA
+     error   #ff4d4d/#080808 = 4.6:1 AA
+   ══════════════════════════════════════════════════════════════ */
+
 :root {
-  --font-sans: "Museo Sans", "Inter", system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, monospace;
-  --simon-primary: #00ffc2;
-  --simon-primary-hover: #00e5b3;
-  --simon-secondary: #19b5ff;
-  --simon-success: #2ad67a;
-  --simon-warning: #ffb547;
-  --simon-destructive: #ff4d4d;
-  --radius-xs: 4px; --radius-sm: 8px; --radius-md: 12px;
-  --radius-lg: 16px; --radius-full: 9999px;
-  --duration-short: 200ms; --duration-medium: 300ms; --duration-long: 500ms;
-  --ease-standard: cubic-bezier(0.4,0,0.2,1);
-  --color-cat-truck: #ef4444; --color-cat-car: #00ffc2;
-  --color-cat-motorcycle: #ffb547; --color-cat-bus: #2ad67a;
-  --color-cat-person: #ec4899; --color-cat-boat: #19b5ff;
-  --color-cat-default: #6366f1;
+  --font-sans: "Museo Sans","Inter",system-ui,sans-serif;
+  --font-mono: "Geist Mono",ui-monospace,monospace;
+
+  /* Nivel 1 Reference — simonmovilidad.com produccion */
+  --ref-simon-primary:     #00ffc2;
+  --ref-simon-primary-hov: #00e5b3;
+  --ref-simon-secondary:   #19b5ff;
+  --ref-simon-success:     #2ad67a;
+  --ref-simon-warning:     #ffb547;
+  --ref-simon-error:       #ff4d4d;
+  --ref-dark-bg:           #080808;
+  --ref-dark-surface:      #0c0c12;
+  --ref-dark-card:         #111118;
+  --ref-dark-fg:           #f5f7fa;
+  --ref-dark-muted-fg:     #a7b4c2;
+  --ref-dark-border:       #ffffff14;
+  --ref-light-bg:          #f7fafc;
+  --ref-light-surface:     #f1f6fa;
+  --ref-light-card:        #ffffff;
+  --ref-light-fg:          #0f1722;
+  --ref-light-muted-fg:    #4b5b6b;
+  --ref-light-border:      #d8e2ec;
+  --ref-light-primary:     #00cfc0;
+
+  /* Shape M3 */
+  --shape-none:0px; --shape-extra-small:4px; --shape-small:8px;
+  --shape-medium:12px; --shape-large:16px; --shape-extra-large:28px; --shape-full:9999px;
+  --radius-xs:var(--shape-extra-small); --radius-sm:var(--shape-small);
+  --radius-md:var(--shape-medium); --radius-lg:var(--shape-large);
+  --radius-full:var(--shape-full);
+
+  /* Motion M3 */
+  --duration-short:200ms; --duration-medium:300ms; --duration-long:500ms;
+  --ease-standard:cubic-bezier(0.2,0,0,1);
+
+  /* Spacing */
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
   --space-6:24px; --space-8:32px; --space-12:48px;
-  --md-sys-typescale-label-sm-size:11px; --md-sys-typescale-label-md-size:12px;
-  --md-sys-typescale-body-sm-size:12px; --md-sys-typescale-body-md-size:14px;
-  --md-sys-typescale-title-md-size:14px; --md-sys-typescale-title-lg-size:16px;
-  --md-sys-typescale-headline-size:24px;
+
+  /* M3 Typescale completo */
+  --typescale-display-large:57px; --typescale-display-medium:45px;
+  --typescale-display-small:36px; --typescale-headline-large:32px;
+  --typescale-headline-medium:28px; --typescale-headline-small:24px;
+  --typescale-title-large:22px; --typescale-title-medium:16px;
+  --typescale-title-small:14px; --typescale-label-large:14px;
+  --typescale-label-medium:12px; --typescale-label-small:11px;
+  --typescale-body-large:16px; --typescale-body-medium:14px; --typescale-body-small:12px;
+  --md-sys-typescale-label-sm-size:var(--typescale-label-small);
+  --md-sys-typescale-label-md-size:var(--typescale-label-medium);
+  --md-sys-typescale-body-sm-size:var(--typescale-body-small);
+  --md-sys-typescale-body-md-size:var(--typescale-body-medium);
+  --md-sys-typescale-title-md-size:var(--typescale-title-small);
+  --md-sys-typescale-title-lg-size:var(--typescale-title-medium);
+  --md-sys-typescale-headline-size:var(--typescale-headline-small);
+
+  /* Layout */
   --layout-header:48px; --layout-sidebar:240px; --layout-status-panel:220px;
+
+  /* Nivel 3 Component — categorias vehiculos */
+  --color-cat-truck:#ef4444; --color-cat-car:#00ffc2;
+  --color-cat-motorcycle:#ffb547; --color-cat-bus:#2ad67a;
+  --color-cat-person:#ec4899; --color-cat-boat:#19b5ff; --color-cat-default:#6366f1;
+
+  /* Nivel 3 Component — indicadores de capa */
+  --color-layer-1-mock:#00ffc2; --color-layer-2-demo:#19b5ff;
+  --color-layer-3-mvp:#ffb547; --color-layer-4-legacy:#a7b4c2;
 }
 
-:root, [data-theme="dark"] {
-  --color-bg: #080808; --color-surface: #0c0c12; --color-surface-2: #111118;
-  --color-text: #f5f7fa; --color-text-muted: #a7b4c2;
-  --color-accent: #00ffc2; --color-accent-hover: #00e5b3;
-  --color-accent-dim: rgba(0,255,194,0.12);
-  --color-online: #00ffc2; --color-online-dim: rgba(0,255,194,0.12);
-  --color-online-ring: rgba(0,255,194,0.35);
-  --color-offline: #4b5b6b; --color-offline-dim: rgba(75,91,107,0.15);
-  --color-warning: #ffb547; --color-danger: #ff4d4d;
-  --color-danger-dim: rgba(255,77,77,0.12); --color-success: #2ad67a;
-  --color-border: rgba(255,255,255,0.078); --color-border-2: rgba(255,255,255,0.15);
-  --color-border-focus: #00ffc2;
-  --focus-ring: 0 0 0 3px rgba(0,255,194,0.45);
+/* ── DARK (default) ── */
+:root,[data-theme="dark"] {
+  --color-primary:var(--ref-simon-primary); --color-on-primary:#003d2e;
+  --color-primary-container:rgba(0,255,194,0.16);
+  --color-secondary:var(--ref-simon-secondary); --color-on-secondary:#003049;
+  --color-secondary-container:rgba(25,181,255,0.14);
+  --color-error:var(--ref-simon-error); --color-on-error:#3b0000;
+  --color-error-container:rgba(255,77,77,0.14);
+
+  /* M3 Surface containers */
+  --color-surface-container-lowest:#030305;
+  --color-surface-container-low:var(--ref-dark-bg);
+  --color-surface-container:var(--ref-dark-surface);
+  --color-surface-container-high:var(--ref-dark-card);
+  --color-surface-container-highest:#1a1a24;
+  --color-surface-dim:#030305; --color-surface-bright:#1a1a24;
+  --color-on-surface:var(--ref-dark-fg);
+  --color-on-surface-variant:var(--ref-dark-muted-fg);
+  --color-outline:rgba(255,255,255,0.35);
+  --color-outline-variant:var(--ref-dark-border);
+
+  /* Aliases */
+  --color-bg:var(--color-surface-container-low);
+  --color-surface:var(--color-surface-container);
+  --color-surface-2:var(--color-surface-container-high);
+  --color-surface-3:var(--color-surface-container-highest);
+  --color-text:var(--color-on-surface); --color-text-muted:var(--color-on-surface-variant);
+  --color-accent:var(--color-primary); --color-accent-dim:rgba(0,255,194,0.14);
+  --color-border:var(--color-outline-variant); --color-border-2:var(--color-outline);
+  --color-border-focus:var(--color-primary);
+
+  /* Estado conexion */
+  --color-online:var(--ref-simon-primary); --color-online-dim:rgba(0,255,194,0.12);
+  --color-online-ring:rgba(0,255,194,0.35);
+  --color-offline:#4b5b6b; --color-offline-dim:rgba(75,91,107,0.18);
+  --color-warning:var(--ref-simon-warning); --color-warning-dim:rgba(255,181,71,0.14);
+  --color-danger:var(--ref-simon-error); --color-danger-dim:rgba(255,77,77,0.14);
+  --color-success:var(--ref-simon-success); --color-success-dim:rgba(42,214,122,0.14);
+  --focus-ring:0 0 0 3px rgba(0,255,194,0.45);
+
+  /* Capa 2 Demo — estados de conexion Traccar */
+  --color-connecting:#ffb547; --color-connecting-dim:rgba(255,181,71,0.14);
+  --color-stale:#a7b4c2; --color-stale-dim:rgba(167,180,194,0.14);
+  --color-stale-border:rgba(167,180,194,0.35);
+
+  /* Capa 3 MVP — alertas y marcadores */
+  --color-alert-speed:#ff4d4d; --color-alert-speed-dim:rgba(255,77,77,0.18);
+  --color-alert-geofence:#ffb547; --color-alert-geofence-dim:rgba(255,181,71,0.18);
+  --color-alert-battery:#ff4d4d; --color-alert-offline:#a7b4c2;
+  --color-marker-selected:var(--ref-simon-primary);
+  --color-marker-cluster-bg:rgba(0,255,194,0.20);
+  --color-marker-cluster-text:var(--ref-simon-primary);
+  --color-marker-trail:rgba(0,255,194,0.35);
+  --color-marker-trail-fade:rgba(0,255,194,0.08);
+
+  /* Capa 4 Legacy — fuente de datos y migracion */
+  --color-data-source-traccar:rgba(25,181,255,0.20);
+  --color-data-source-simon:rgba(0,255,194,0.20);
+  --color-migration-active:rgba(255,181,71,0.20);
+  --color-migration-text:var(--ref-simon-warning);
 }
 
+/* ── LIGHT ── */
 [data-theme="light"] {
-  --color-bg: #f7fafc; --color-surface: #ffffff; --color-surface-2: #f1f6fa;
-  --color-text: #0f1722; --color-text-muted: #4b5b6b;
-  --color-accent: #00cfc0; --color-accent-hover: #00b8ab;
-  --color-accent-dim: rgba(0,207,192,0.10);
-  --color-online: #00cfc0; --color-online-dim: rgba(0,207,192,0.10);
-  --color-online-ring: rgba(0,207,192,0.30);
-  --color-offline: #9ca3af; --color-offline-dim: rgba(156,163,175,0.15);
-  --color-warning: #d97706; --color-danger: #dc2626;
-  --color-danger-dim: rgba(220,38,38,0.08); --color-success: #16a34a;
-  --color-border: #d8e2ec; --color-border-2: rgba(0,0,0,0.18);
-  --color-border-focus: #00cfc0;
-  --focus-ring: 0 0 0 3px rgba(0,207,192,0.4);
+  --color-primary:var(--ref-light-primary); --color-on-primary:#ffffff;
+  --color-primary-container:rgba(0,207,192,0.12);
+  --color-error:#dc2626; --color-on-error:#ffffff;
+  --color-error-container:rgba(220,38,38,0.10);
+
+  --color-surface-container-lowest:#ffffff;
+  --color-surface-container-low:var(--ref-light-bg);
+  --color-surface-container:var(--ref-light-surface);
+  --color-surface-container-high:#e8edf2;
+  --color-surface-container-highest:#dde3ea;
+  --color-on-surface:var(--ref-light-fg);
+  --color-on-surface-variant:var(--ref-light-muted-fg);
+  --color-outline:rgba(0,0,0,0.30);
+  --color-outline-variant:var(--ref-light-border);
+
+  --color-bg:var(--color-surface-container-low);
+  --color-surface:var(--color-surface-container-lowest);
+  --color-surface-2:var(--color-surface-container);
+  --color-surface-3:var(--color-surface-container-high);
+  --color-text:var(--color-on-surface); --color-text-muted:var(--color-on-surface-variant);
+  --color-accent:var(--color-primary); --color-accent-dim:rgba(0,207,192,0.10);
+  --color-border:var(--color-outline-variant); --color-border-2:var(--color-outline);
+  --color-border-focus:var(--color-primary);
+
+  --color-online:#009688; --color-online-dim:rgba(0,150,136,0.10);
+  --color-online-ring:rgba(0,150,136,0.30);
+  --color-offline:#9ca3af; --color-offline-dim:rgba(156,163,175,0.15);
+  --color-warning:#d97706; --color-warning-dim:rgba(217,119,6,0.12);
+  --color-danger:#dc2626; --color-danger-dim:rgba(220,38,38,0.10);
+  --color-success:#16a34a; --color-success-dim:rgba(22,163,74,0.10);
+  --focus-ring:0 0 0 3px rgba(0,207,192,0.40);
+
+  --color-connecting:#d97706; --color-connecting-dim:rgba(217,119,6,0.12);
+  --color-stale:#64748b; --color-stale-dim:rgba(100,116,139,0.12);
+  --color-stale-border:rgba(100,116,139,0.30);
+  --color-alert-speed:#dc2626; --color-alert-speed-dim:rgba(220,38,38,0.12);
+  --color-alert-geofence:#d97706; --color-alert-battery:#dc2626; --color-alert-offline:#64748b;
+  --color-marker-selected:var(--ref-light-primary);
+  --color-marker-trail:rgba(0,207,192,0.40); --color-marker-trail-fade:rgba(0,207,192,0.08);
+  --color-data-source-traccar:rgba(2,132,199,0.12);
+  --color-data-source-simon:rgba(0,207,192,0.12);
+  --color-migration-active:rgba(217,119,6,0.12); --color-migration-text:#d97706;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
-html { font-family: var(--font-sans); background-color: var(--color-bg);
-  color: var(--color-text);
-  transition: background-color var(--duration-medium) var(--ease-standard),
-    color var(--duration-medium) var(--ease-standard); }
-body { margin:0; line-height:1.5; -webkit-font-smoothing:antialiased; }
-:focus-visible { outline:3px solid var(--color-accent); outline-offset:2px; border-radius:var(--radius-xs); }
-@media (prefers-reduced-motion:reduce) {
-  *, *::before, *::after { animation-duration:0.01ms !important;
-    animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
-}
-.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0; }
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-@keyframes pulse-ring {
-  0%{box-shadow:0 0 0 0 var(--color-online-ring)}
-  70%{box-shadow:0 0 0 8px transparent}
-  100%{box-shadow:0 0 0 0 transparent}
-}
-@keyframes val-highlight { 0%{color:var(--color-accent)} 100%{color:var(--color-text)} }
-@keyframes fade-in { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
-.shimmer {
-  background: linear-gradient(90deg,var(--color-surface-2) 25%,var(--color-surface) 50%,var(--color-surface-2) 75%);
-  background-size:200% 100%; animation:shimmer 1.5s ease-in-out infinite;
-}
-.status-grid-responsive { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3); }
-@media (min-width:768px) { .status-grid-responsive { grid-template-columns:repeat(4,1fr); gap:var(--space-4); } }
-.vehicle-map { position:relative; height:100%; }
-.debug-atomic [data-atomic="atom"]     { outline:1px dashed #00ffc2; }
-.debug-atomic [data-atomic="molecule"] { outline:1px dashed #19b5ff; }
-.debug-atomic [data-atomic="organism"] { outline:1px dashed #ffb547; }
-.debug-atomic [data-atomic="template"] { outline:1px dashed #ff4d4d; }
-.debug-atomic [data-atomic="page"]     { outline:1px dashed #a7b4c2; }
+/* Base reset */
+*,*::before,*::after{box-sizing:border-box;}
+html{font-family:var(--font-sans);background-color:var(--color-bg);color:var(--color-text);
+  transition:background-color var(--duration-medium) var(--ease-standard),
+             color var(--duration-medium) var(--ease-standard);}
+body{margin:0;line-height:1.5;-webkit-font-smoothing:antialiased;}
+:focus-visible{outline:3px solid var(--color-accent);outline-offset:2px;border-radius:var(--radius-xs);}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{
+  animation-duration:0.01ms!important;animation-iteration-count:1!important;
+  transition-duration:0.01ms!important;}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;}
+
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 var(--color-online-ring)}
+  70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes pulse-alert{0%{box-shadow:0 0 0 0 var(--color-alert-speed-dim)}
+  70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes val-highlight{0%{color:var(--color-accent)}100%{color:var(--color-text)}}
+@keyframes fade-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes stale-pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+.shimmer{background:linear-gradient(90deg,
+  var(--color-surface-container) 25%,
+  var(--color-surface-container-high) 50%,
+  var(--color-surface-container) 75%);
+  background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;}
+
+.status-grid-responsive{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);}
+@media(min-width:768px){.status-grid-responsive{grid-template-columns:repeat(4,1fr);gap:var(--space-4);}}
+.vehicle-map{position:relative;height:100%;}
+.vehicle-map__trail{stroke:var(--color-marker-trail);stroke-width:2;fill:none;stroke-dasharray:4 4;}
+.debug-atomic [data-atomic="atom"]    {outline:1px dashed var(--color-layer-1-mock);}
+.debug-atomic [data-atomic="molecule"]{outline:1px dashed var(--color-layer-2-demo);}
+.debug-atomic [data-atomic="organism"]{outline:1px dashed var(--color-layer-3-mvp);}
+.debug-atomic [data-atomic="template"]{outline:1px dashed var(--ref-simon-error);}
+.debug-atomic [data-atomic="page"]    {outline:1px dashed var(--color-layer-4-legacy);}

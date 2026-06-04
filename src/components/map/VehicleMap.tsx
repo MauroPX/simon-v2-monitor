@@ -14,8 +14,8 @@ import { knotsToKmh, courseToCardinal, interpolatePosition, type LatLng } from '
 import type { TraccarPosition } from '@/types/traccar'
 
 const CAT_COLOR: Record<string,string> = {
-  truck: '#ef4444', car: '#00ffc2', motorcycle: '#ffb547',
-  bus: '#2ad67a', person: '#ec4899', boat: '#19b5ff', default: '#6366f1',
+  truck:'#ef4444', car:'#00ffc2', motorcycle:'#ffb547',
+  bus:'#2ad67a', person:'#ec4899', boat:'#19b5ff', default:'#6366f1',
 }
 
 function MarkerController({ position, device }:
@@ -101,8 +101,8 @@ export function VehicleMap() {
       {isError && (
         <div role="alert" aria-live="assertive"
           style={{ position:'absolute', top:10, left:'50%', transform:'translateX(-50%)',
-            zIndex:1000, background:'var(--color-surface)',
-            border:'1px solid var(--color-danger)', borderRadius:'var(--radius-md)',
+            zIndex:1000, background:'var(--color-surface-container-high)',
+            border:'1px solid var(--color-error)', borderRadius:'var(--radius-md)',
             padding:'7px 14px', fontSize:12, display:'flex', alignItems:'center',
             gap:7, boxShadow:'0 4px 12px rgba(0,0,0,0.2)', whiteSpace:'nowrap' }}>
           <span aria-hidden="true">⚠️</span>

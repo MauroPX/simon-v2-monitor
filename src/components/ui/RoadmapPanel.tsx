@@ -7,7 +7,7 @@ const LAYERS = [
     name: 'Capa 1 — Mock',
     status: 'done',
     label: 'LIVE',
-    color: '#4EEAC4',
+    color: '#00ffc2',
     items: [
       'UI completa con tokens Simon Movilidad',
       'WCAG 2.1 AA — dl/dt/dd + aria-live + focus-visible',
@@ -25,7 +25,7 @@ const LAYERS = [
     name: 'Capa 2 — Demo',
     status: 'next',
     label: 'PRÓXIMO',
-    color: '#3b82f6',
+    color: '#19b5ff',
     items: [
       'Login real contra Traccar demo4.traccar.org',
       'Lista de dispositivos reales (20-50 vehículos)',
@@ -40,7 +40,7 @@ const LAYERS = [
     name: 'Capa 3 — MVP',
     status: 'roadmap',
     label: 'ROADMAP',
-    color: '#f59e0b',
+    color: '#ffb547',
     items: [
       'Servidor Traccar propio de Simon Movilidad',
       'WebSocket /api/socket en lugar de polling',
@@ -57,7 +57,7 @@ const LAYERS = [
     name: 'Capa 4 — Legacy/C',
     status: 'roadmap',
     label: 'FUTURO',
-    color: '#8899AA',
+    color: '#a7b4c2',
     items: [
       'Adaptador simon.ts — mapeo de contrato API propio',
       'API propia Simon Movilidad (no Traccar)',
@@ -70,9 +70,9 @@ const LAYERS = [
 ]
 
 const STATUS_STYLE: Record<string, { bg: string; text: string }> = {
-  done:    { bg: 'rgba(78,234,196,0.15)', text: '#4EEAC4' },
-  next:    { bg: 'rgba(59,130,246,0.15)', text: '#3b82f6' },
-  roadmap: { bg: 'rgba(245,158,11,0.15)', text: '#f59e0b' },
+  done:    { bg: 'rgba(78,234,196,0.15)', text: '#00ffc2' },
+  next:    { bg: 'rgba(59,130,246,0.15)', text: '#19b5ff' },
+  roadmap: { bg: 'rgba(245,158,11,0.15)', text: '#ffb547' },
 }
 
 export function RoadmapPanel() {
@@ -139,8 +139,8 @@ export function RoadmapPanel() {
               {LAYERS.map(l => (
                 <div key={l.id} style={{
                   width: 8, height: 8, borderRadius: '50%',
-                  background: l.status === 'done' ? '#4EEAC4'
-                    : l.status === 'next' ? '#3b82f6' : 'var(--color-border-2)',
+                  background: l.status === 'done' ? '#00ffc2'
+                    : l.status === 'next' ? '#19b5ff' : 'var(--color-border-2)',
                 }} aria-hidden="true"/>
               ))}
             </div>
@@ -217,7 +217,7 @@ export function RoadmapPanel() {
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           }}>
             <span style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>
-              Capa activa: <span style={{ color: '#4EEAC4', fontWeight: 500 }}>Mock</span>
+              Capa activa: <span style={{ color: '#00ffc2', fontWeight: 500 }}>Mock</span>
             </span>
             <a href="https://github.com/MauroPX/simon-v2-monitor"
               target="_blank" rel="noopener noreferrer"

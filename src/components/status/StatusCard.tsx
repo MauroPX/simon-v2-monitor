@@ -104,7 +104,7 @@ export function StatusCard() {
     <section aria-label={`Estado del vehículo ${device.name}`} data-atomic="organism">
       {isError && error && (
         <div role="alert" aria-live="assertive"
-          style={{ background:'var(--color-danger-dim)', border:'1px solid var(--color-danger)',
+          style={{ background:'var(--color-error-container)', border:'1px solid var(--color-danger)',
             borderRadius:'var(--radius-sm)', padding:'7px 12px', display:'flex',
             alignItems:'center', gap:'var(--space-2)', marginBottom:'var(--space-2)', fontSize:'var(--md-sys-typescale-label-md-size)' }}>
           <span aria-hidden="true">⚠️</span>

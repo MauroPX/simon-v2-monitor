@@ -15,8 +15,8 @@ const CAT_EMOJI: Record<string,string> = {
   truck:'🚛', car:'🚗', motorcycle:'🏍️', bus:'🚌', person:'🚶', boat:'⛵', default:'🚙'
 }
 const CAT_COLOR: Record<string,string> = {
-  truck: '#ef4444', car: '#00ffc2', motorcycle: '#ffb547',
-  bus: '#2ad67a', person: '#ec4899', boat: '#19b5ff', default: '#6366f1',
+  truck:'#ef4444', car:'#00ffc2', motorcycle:'#ffb547',
+  bus:'#2ad67a', person:'#ec4899', boat:'#19b5ff', default:'#6366f1',
 }
 
 function DeviceItem({ device, isSelected, onClick }:
@@ -35,8 +35,8 @@ function DeviceItem({ device, isSelected, onClick }:
       aria-label={`${device.name}, ${isOnline ? 'en línea' : 'desconectado'}`} data-atomic="molecule" data-component="DeviceItem"
       style={{ display:'flex', alignItems:'center', gap:10, padding:'9px 10px',
         borderRadius:'var(--radius-md)', cursor:'pointer', listStyle:'none',
-        border:`1px solid ${isSelected ? 'var(--color-accent)' : 'transparent'}`,
-        background: isSelected ? 'var(--color-accent-dim)' : 'transparent',
+        border:`1px solid ${isSelected ? 'var(--color-primary)' : 'transparent'}`,
+        background: isSelected ? 'var(--color-surface-container-highest)' : 'transparent',
         transition:'background 0.15s, border-color 0.15s', marginBottom:2, outline:'none' }}>
       <div aria-hidden="true" style={{ width:34, height:34, borderRadius:9,
         background:`${color}22`, display:'flex', alignItems:'center',
@@ -70,8 +70,8 @@ export function DeviceSelector() {
     (d.category ?? '').toLowerCase().includes(search.toLowerCase())
   )
 
-  const sidebarStyle = { background:'var(--color-surface)',
-    borderRight:'1px solid var(--color-border)',
+  const sidebarStyle = { background:'var(--color-surface-container)',
+    borderRight:'1px solid var(--color-outline-variant)',
     display:'flex', flexDirection:'column' as const, overflow:'hidden' }
 
   if (isLoading) return (
