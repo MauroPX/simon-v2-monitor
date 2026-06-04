@@ -112,7 +112,7 @@ function RoadmapSplitButton() {
             style={{position:'fixed',inset:0,zIndex:98}} aria-hidden="true"/>
           <div role="listbox" aria-label="Capas evolutivas"
             style={{
-              position:'absolute', top:'calc(100% + 6px)', right:0, zIndex:99,
+              position:'fixed', top:50, right:16, zIndex:999,
               background:'var(--color-surface-container-high)',
               border:'1px solid var(--color-outline-variant)',
               borderRadius:12, width:288, overflow:'visible',
