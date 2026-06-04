@@ -54,7 +54,7 @@ export function StatusCard() {
           <p className="status-card__error-msg">No pudimos conectar con el servidor de seguimiento.</p>
           <p className="status-card__error-sub">Verifica tu conexión o intenta de nuevo en unos segundos.</p>
         </div>
-        <button onClick={() => retryDevices()} className="status-card__retry-btn"
+        <button onClick={() => useAppStore.getState().setAppState('idle')} className="status-card__retry-btn"
           aria-label="Reintentar conexión con el servidor" data-atomic="atom">Reintentar</button>
       </div>
     </div>
