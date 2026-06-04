@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { AppHeader } from '@/components/ui/AppHeader'
 import { DeviceSelector } from '@/components/ui/DeviceSelector'
 import { StatusCard, StatusCardSkeleton } from '@/components/status/StatusCard'
-import { RoadmapPanel } from '@/components/ui/RoadmapPanel'
 import { StateTestPanel } from '@/components/ui/StateTestPanel'
 import { useAppStore } from '@/store/useAppStore'
 import { useAuth } from '@/hooks/useAuth'
@@ -72,7 +71,6 @@ export default function HomePage() {
         </main>
       </div>
 
-      <RoadmapPanel />
       <StateTestPanel />
     </>
   )
