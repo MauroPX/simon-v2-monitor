@@ -147,6 +147,8 @@ function RoadmapSplitButton() {
               </div>
             ))}
           </div>
+          <div onClick={() => setOpen(false)}
+            style={{position:'fixed',inset:0,zIndex:97}} aria-hidden="true"/>
         </>
       )}
     </div>
