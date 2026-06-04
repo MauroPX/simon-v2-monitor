@@ -35,9 +35,30 @@ export function StatusCardSkeleton() {
  * M3 tokens: surface-container roles para jerarquía visual.
  */
 export function StatusCard() {
-  const { selectedDeviceId, selectDevice, devices } = useAppStore()
+  const { selectedDeviceId, selectDevice, devices, appState } = useAppStore()
+  
+  // Estados forzados desde StateTestPanel (?demo=true)
+  const isForcedLoading = appState === 'loading-devices'
+  const isForcedError = appState.startsWith('error')
   const { position: pos, isLoading, isError } = useTraccarPosition()
   const device = devices.find(d=>d.id===selectedDeviceId)
+
+  if (isForcedLoading) return <StatusCardSkeleton/>
+
+  if (isForcedError) return (
+    <div role="alert" data-atomic="organism" data-component="StatusCard" data-state="error"
+      className="status-card status-card--error">
+      <div className="status-card__error-inner">
+        <span className="status-card__error-icon" aria-hidden="true">⚠️</span>
+        <div>
+          <p className="status-card__error-msg">No pudimos conectar con el servidor de seguimiento.</p>
+          <p className="status-card__error-sub">Verifica tu conexión o intenta de nuevo en unos segundos.</p>
+        </div>
+        <button onClick={() => retryDevices()} className="status-card__retry-btn"
+          aria-label="Reintentar conexión con el servidor" data-atomic="atom">Reintentar</button>
+      </div>
+    </div>
+  )
 
   if (!selectedDeviceId) return (
     <div data-atomic="organism" data-component="StatusCard" data-state="empty"
