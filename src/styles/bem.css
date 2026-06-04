@@ -694,3 +694,14 @@
 .roadmap-layer__items  { list-style: none; display: flex; flex-direction: column; gap: 4px; }
 .roadmap-layer__item   { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--color-text-muted); }
 .roadmap-layer__item-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+/* Material Icons en device-item */
+.device-item__icon-symbol {
+  font-size: 18px;
+  color: inherit;
+}
+.device-selector__search-icon {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}

@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+/* Material Symbols — uso:
+   <span class="material-symbols-outlined" aria-hidden="true">directions_car</span>
+   Siempre con aria-hidden="true" + aria-label en el elemento padre
+*/
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'OPSZ' 20;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

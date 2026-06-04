@@ -11,53 +11,105 @@ const LAYERS = [
   { id:3, label:'Capa 3', name:'MVP', status:'roadmap', color:'#ffb547',
     desc:'WebSocket nativo. Alertas. Rastro de ruta. Instancia propia.',
     items:['WebSocket tiempo real','Alertas velocidad','Alertas geocerca','Rastro SVG','Instancia Traccar','Cluster marcadores','SPRINT_3_REPORT'] },
-  { id:4, label:'Capa 4', name:'Legacy/C', status:'future', color:'#a7b4c2',
+  { id:4, label:'Capa 4', name:'Legacy', status:'future', color:'#a7b4c2',
     desc:'Adaptador API Simon Movilidad. Migración sin downtime.',
-    items:['Adaptador simon.ts','Dual-source toggle','Feature flags','MIGRATION_DOC C4','POSTMORTEM template','TIRFC quarterly'] },
+    items:['Adaptador simon.ts','Dual-source toggle','Feature flags','MIGRATION_DOC C4','POSTMORTEM template'] },
 ]
+
+const STATUS_LABEL: Record<string,string> = {
+  live:'● LIVE', next:'◎ PRÓXIMO', roadmap:'○ ROADMAP', future:'○ FUTURO'
+}
 
 /**
  * RoadmapPanel — organism
- * @description Panel flotante con roadmap de 4 capas evolutivas y Design System.
- * Muestra estado, descripción e ítems de cada capa al expandir.
+ * @description Panel flotante con roadmap de 4 capas evolutivas.
+ * Usa botón nativo para garantizar accesibilidad por teclado (WCAG 2.1.1).
  */
 export function RoadmapPanel() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<number|null>(null)
+
   return (
-    <div data-atomic="organism" data-component="RoadmapPanel" className="roadmap-panel">
-      <button onClick={()=>setOpen(o=>!o)} aria-expanded={open}
-        aria-controls="roadmap-content" className="roadmap-panel__trigger">
-        <span aria-hidden="true">🗺️</span>
+    <div
+      data-atomic="organism"
+      data-component="RoadmapPanel"
+      className="roadmap-panel"
+    >
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+        aria-controls="roadmap-content"
+        aria-label="Abrir panel de roadmap y documentación"
+        className="roadmap-panel__trigger"
+        data-atomic="atom"
+      >
+        <span className="material-symbols-outlined" aria-hidden="true">map</span>
         <span className="roadmap-panel__trigger-label">Roadmap & Docs</span>
+        <span className="material-symbols-outlined" aria-hidden="true" style={{fontSize:16}}>
+          {open ? 'expand_more' : 'chevron_left'}
+        </span>
       </button>
+
       {open && (
-        <div id="roadmap-content" className="roadmap-panel__content" data-atomic="template">
-          <div className="roadmap-panel__header">
+        <div
+          id="roadmap-content"
+          role="dialog"
+          aria-label="Panel de roadmap evolutivo"
+          className="roadmap-panel__content"
+          data-atomic="template"
+        >
+          <div className="roadmap-panel__header" data-atomic="molecule">
             <span className="roadmap-panel__title">Capas Evolutivas</span>
-            <button onClick={()=>setOpen(false)} aria-label="Cerrar panel"
-              className="roadmap-panel__close">×</button>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Cerrar panel de roadmap"
+              className="roadmap-panel__close"
+              data-atomic="atom"
+            >
+              <span className="material-symbols-outlined" aria-hidden="true" style={{fontSize:18}}>close</span>
+            </button>
           </div>
-          <div className="roadmap-panel__layers">
-            {LAYERS.map(layer=>(
-              <div key={layer.id} data-atomic="molecule"
-                className={`roadmap-layer roadmap-layer--${layer.status}${active===layer.id?' roadmap-layer--expanded':''}`}>
-                <button onClick={()=>setActive(active===layer.id?null:layer.id)}
-                  className="roadmap-layer__header" aria-expanded={active===layer.id}>
-                  <span className="roadmap-layer__dot" style={{background:layer.color}} aria-hidden="true"/>
+
+          <div className="roadmap-panel__layers" data-atomic="organism">
+            {LAYERS.map(layer => (
+              <div
+                key={layer.id}
+                data-atomic="molecule"
+                className={`roadmap-layer roadmap-layer--${layer.status}${active===layer.id?' roadmap-layer--expanded':''}`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActive(active === layer.id ? null : layer.id)}
+                  className="roadmap-layer__header"
+                  aria-expanded={active === layer.id}
+                  aria-label={`${layer.label} ${layer.name} — ${layer.status}`}
+                  data-atomic="atom"
+                >
+                  <span
+                    className="roadmap-layer__dot"
+                    style={{ background: layer.color }}
+                    aria-hidden="true"
+                  />
                   <span className="roadmap-layer__label">{layer.label}</span>
                   <span className="roadmap-layer__name">{layer.name}</span>
-                  <span className="roadmap-layer__status" style={{color:layer.color}}>
-                    {layer.status==='live'?'● LIVE':layer.status==='next'?'◎ PRÓXIMO':layer.status==='roadmap'?'○ ROADMAP':'○ FUTURO'}
+                  <span className="roadmap-layer__status" style={{ color: layer.color }}>
+                    {STATUS_LABEL[layer.status]}
                   </span>
                 </button>
-                {active===layer.id&&(
-                  <div className="roadmap-layer__detail">
+
+                {active === layer.id && (
+                  <div className="roadmap-layer__detail" data-atomic="molecule">
                     <p className="roadmap-layer__desc">{layer.desc}</p>
-                    <ul className="roadmap-layer__items">
-                      {layer.items.map((item,i)=>(
-                        <li key={i} className="roadmap-layer__item">
-                          <span className="roadmap-layer__item-dot" style={{background:layer.color}} aria-hidden="true"/>
+                    <ul className="roadmap-layer__items" aria-label={`Ítems de ${layer.name}`}>
+                      {layer.items.map((item, i) => (
+                        <li key={i} className="roadmap-layer__item" data-atomic="atom">
+                          <span
+                            className="roadmap-layer__item-dot"
+                            style={{ background: layer.color }}
+                            aria-hidden="true"
+                          />
                           {item}
                         </li>
                       ))}

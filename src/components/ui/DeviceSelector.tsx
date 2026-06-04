@@ -4,8 +4,9 @@ import { useAppStore } from '@/store/useAppStore'
 import { useDevices } from '@/hooks/useTraccar'
 import type { TraccarDevice } from '@/types/traccar'
 
-const CAT_EMOJI: Record<string,string> = {
-  truck:'🚛', car:'🚗', motorcycle:'🏍️', bus:'🚌', person:'🚶', boat:'⛵', default:'🚙'
+const CAT_ICON: Record<string,string> = {
+  truck:'local_shipping', car:'directions_car', motorcycle:'two_wheeler',
+  bus:'directions_bus', person:'directions_walk', boat:'sailing', default:'commute'
 }
 
 /**
@@ -53,7 +54,9 @@ function DeviceItem({ device, isSelected, onSelect }:{
     >
       <div className="device-item__icon" aria-hidden="true"
         style={{background:`${color}22`,border:`1px solid ${color}55`}}>
-        <span className="device-item__emoji">{CAT_EMOJI[cat]??CAT_EMOJI.default}</span>
+        <span className="material-symbols-outlined device-item__icon-symbol" aria-hidden="true">
+          {CAT_ICON[cat]??CAT_ICON.default}
+        </span>
       </div>
       <div className="device-item__info">
         <span className="device-item__name">{device.name}</span>
@@ -91,7 +94,7 @@ export function DeviceSelector() {
       <div className="device-selector__header">
         <span className="device-selector__count">FLOTA ACTIVA ({online})</span>
         <div className="device-selector__search-wrap">
-          <span className="device-selector__search-icon" aria-hidden="true">🔍</span>
+          <span className="material-symbols-outlined device-selector__search-icon" aria-hidden="true" style={{fontSize:16}}>search</span>
           <input type="search" placeholder="Buscar vehículo..."
             aria-label="Buscar vehículo en la flota"
             className="device-selector__search"
