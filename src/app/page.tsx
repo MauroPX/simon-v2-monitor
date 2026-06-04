@@ -1,41 +1,77 @@
 'use client'
 import dynamic from 'next/dynamic'
+import { useState, useEffect } from 'react'
 import { AppHeader } from '@/components/ui/AppHeader'
 import { DeviceSelector } from '@/components/ui/DeviceSelector'
 import { StatusCard, StatusCardSkeleton } from '@/components/status/StatusCard'
 import { RoadmapPanel } from '@/components/ui/RoadmapPanel'
 import { StateTestPanel } from '@/components/ui/StateTestPanel'
 import { useAppStore } from '@/store/useAppStore'
+import { useAuth } from '@/hooks/useAuth'
 
 const VehicleMap = dynamic(
   () => import('@/components/map/VehicleMap').then(m => m.VehicleMap),
-  { ssr: false, loading: () => <div style={{width:'100%',height:'100%',background:'var(--color-surface-2)'}} /> }
+  { ssr: false, loading: () => (
+    <div role="status" aria-label="Cargando mapa"
+      className="shimmer" style={{ width:'100%', height:'100%', minHeight:200 }}/>
+  )}
 )
 
 export default function HomePage() {
+  useAuth()
   const { appState } = useAppStore()
   const isLoading = appState === 'authenticating' || appState === 'loading-devices'
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  useEffect(() => {
+    if (!sidebarOpen) return
+    const handler = (e: MouseEvent) => {
+      const sidebar = document.querySelector('.app-sidebar')
+      if (sidebar && !sidebar.contains(e.target as Node)) setSidebarOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [sidebarOpen])
+
   return (
     <>
-      <a href="#main-content" style={{position:'absolute',left:'-9999px',zIndex:9999,padding:'8px 16px',background:'var(--color-accent)',color:'var(--color-bg)',borderRadius:4,fontSize:14,textDecoration:'none',fontWeight:500}} onFocus={e=>{e.currentTarget.style.left='8px';e.currentTarget.style.top='8px'}} onBlur={e=>{e.currentTarget.style.left='-9999px'}}>
-        Saltar al contenido principal
-      </a>
-      <div style={{display:'grid',gridTemplateRows:'48px 1fr',height:'100dvh',background:'var(--color-surface-container-low)',overflow:'hidden'}}>
-        <AppHeader />
-        <main id="main-content" role="main" style={{display:'grid',gridTemplateColumns:'240px 1fr',overflow:'hidden'}}>
-          <nav style={{background:'var(--color-surface-container)',borderRight:'1px solid var(--color-outline-variant)',display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      <a href="#main-content" className="skip-link">Saltar al contenido principal</a>
+
+      <div className="app-layout" data-atomic="page" data-component="FleetMonitorPage">
+
+        <AppHeader onMenuClick={() => setSidebarOpen(o => !o)} />
+
+        <main id="main-content" className="app-main" role="main"
+          aria-label="Panel de control de flota vehicular" data-atomic="template">
+
+          <aside
+            className={`app-sidebar${sidebarOpen ? ' open' : ''}`}
+            aria-label="Lista de vehículos de la flota"
+            data-atomic="organism"
+          >
             <DeviceSelector />
-          </nav>
-          <section style={{display:'grid',gridTemplateRows:'1fr 220px',overflow:'hidden'}}>
-            <div style={{position:'relative',overflow:'hidden'}}>
-              {isLoading ? <div style={{width:'100%',height:'100%',background:'var(--color-surface-2)'}} /> : <VehicleMap />}
+          </aside>
+
+          <div className="app-content" data-atomic="template">
+
+            <div style={{ position:'relative', overflow:'hidden', minHeight:200 }}
+              data-atomic="organism">
+              {isLoading ? (
+                <div role="status" aria-label="Cargando mapa"
+                  className="shimmer" style={{ width:'100%', height:'100%', minHeight:200 }}/>
+              ) : (
+                <VehicleMap />
+              )}
             </div>
-            <div style={{background:'var(--color-surface)',borderTop:'1px solid var(--color-border)',padding:'14px 16px',overflow:'hidden'}}>
+
+            <div className="status-panel-mobile" data-atomic="organism">
               {isLoading ? <StatusCardSkeleton /> : <StatusCard />}
             </div>
-          </section>
+
+          </div>
         </main>
       </div>
+
       <RoadmapPanel />
       <StateTestPanel />
     </>

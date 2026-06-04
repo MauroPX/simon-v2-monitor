@@ -5,9 +5,8 @@ import { useQueryClient } from '@tanstack/react-query'
 
 /**
  * StateTestPanel — organism (demo de estados para la prueba técnica)
- * Fuerza estados de UI usando el store y React Query.
- * Visible con ?demo=true en la URL.
- * WCAG 2.1.1: todos los botones son nativos con aria-label.
+ * Visible con ?demo=true. Posición: esquina inferior derecha sobre el status panel.
+ * WCAG 2.1.1: botones nativos con aria-label y aria-pressed.
  */
 export function StateTestPanel() {
   const [visible, setVisible] = useState(false)
@@ -36,7 +35,7 @@ export function StateTestPanel() {
         selectDevice(null as any)
         break
       case 'error':
-        setAppState('error-network' as any, 'No pudimos conectar con el servidor de seguimiento. Verifica tu conexión.')
+        setAppState('error-network' as any, 'No pudimos conectar con el servidor.')
         break
       case 'empty':
         setAppState('idle')
@@ -48,41 +47,45 @@ export function StateTestPanel() {
   const states = [
     { id:'normal',  label:'Normal',       icon:'check_circle',    desc:'Datos activos' },
     { id:'loading', label:'Skeleton',      icon:'hourglass_empty', desc:'Carga inicial' },
-    { id:'error',   label:'Error + Retry', icon:'error_outline',   desc:'Fallo de red' },
+    { id:'error',   label:'Error+Retry',   icon:'error_outline',   desc:'Fallo de red' },
     { id:'empty',   label:'Sin vehículo',  icon:'directions_car',  desc:'Empty state' },
   ]
 
   return (
     <aside
       role="complementary"
-      aria-label="Panel de demostración de estados de UI"
+      aria-label="Panel de demostración de estados"
       data-atomic="organism"
       data-component="StateTestPanel"
       style={{
-        position:'fixed', top:'60px', left:'16px', zIndex:300,
+        position:'fixed',
+        bottom:'16px',
+        right:'160px',
+        zIndex:150,
         background:'var(--color-surface-container-high)',
         border:'1px solid var(--color-accent)',
-        borderRadius:'12px', padding:'12px', width:'200px',
-        boxShadow:'0 4px 24px rgba(0,0,0,0.5)',
+        borderRadius:'12px',
+        padding:'8px',
+        display:'flex',
+        flexDirection:'row',
+        gap:'4px',
+        boxShadow:'0 4px 16px rgba(0,0,0,0.4)',
       }}
     >
-      <p style={{fontSize:'9px',fontWeight:700,letterSpacing:'.08em',
-        color:'var(--color-accent)',marginBottom:'10px',textTransform:'uppercase'}}>
-        Demo de estados · prueba técnica
-      </p>
       {states.map(s => (
         <button
           key={s.id}
           type="button"
           onClick={() => forceState(s.id)}
           aria-pressed={active === s.id}
-          aria-label={`Forzar estado ${s.label}: ${s.desc}`}
+          aria-label={`Estado: ${s.label}`}
+          title={s.desc}
           style={{
-            display:'flex', alignItems:'center', gap:'8px',
-            width:'100%', padding:'8px 10px', marginBottom:'6px',
+            display:'flex', flexDirection:'column', alignItems:'center',
+            padding:'6px 10px', gap:'3px',
             background: active===s.id ? 'var(--color-accent-dim)' : 'transparent',
-            border: active===s.id ? '1px solid var(--color-accent)' : '1px solid var(--color-outline-variant)',
-            borderRadius:'8px', cursor:'pointer', textAlign:'left',
+            border: active===s.id ? '1px solid var(--color-accent)' : '1px solid transparent',
+            borderRadius:'8px', cursor:'pointer',
             transition:'all 200ms',
           }}
         >
@@ -90,15 +93,12 @@ export function StateTestPanel() {
             style={{fontSize:16,color:active===s.id?'var(--color-accent)':'var(--color-text-muted)'}}>
             {s.icon}
           </span>
-          <div>
-            <div style={{fontSize:'12px',fontWeight:500,color:'var(--color-text)'}}>{s.label}</div>
-            <div style={{fontSize:'10px',color:'var(--color-text-muted)'}}>{s.desc}</div>
-          </div>
+          <span style={{fontSize:'9px',color:active===s.id?'var(--color-accent)':'var(--color-text-muted)',
+            fontWeight:active===s.id?700:400,whiteSpace:'nowrap'}}>
+            {s.label}
+          </span>
         </button>
       ))}
-      <p style={{fontSize:'9px',color:'var(--color-text-muted)',marginTop:'6px',lineHeight:1.4}}>
-        Visible solo con ?demo=true
-      </p>
     </aside>
   )
 }
