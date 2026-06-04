@@ -102,7 +102,7 @@ function RoadmapSplitButton() {
               position:'absolute', top:'calc(100% + 6px)', right:0, zIndex:99,
               background:'var(--color-surface-container-high)',
               border:'1px solid var(--color-outline-variant)',
-              borderRadius:12, width:288, overflow:'hidden',
+              borderRadius:12, width:288, overflow:'visible',
               boxShadow:'0 8px 24px rgba(0,0,0,0.5)',
             }}>
             <div style={{padding:'8px 12px 6px',borderBottom:'1px solid var(--color-outline-variant)'}}>
