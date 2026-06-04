@@ -3,7 +3,8 @@
 // ThemeScript inline evita flash of wrong theme (FOWT)
 
 import type { Metadata } from 'next'
-import '@/styles/globals.css'\nimport '@/styles/bem.css'
+import '@/styles/globals.css'
+import '@/styles/bem.css'
 import { Providers } from './providers'
 
 
