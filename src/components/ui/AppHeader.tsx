@@ -108,8 +108,6 @@ function RoadmapSplitButton() {
       {/* Dropdown */}
       {open && (
         <>
-          <div onClick={() => setOpen(false)}
-            style={{position:'fixed',inset:0,zIndex:98}} aria-hidden="true"/>
           <div role="listbox" aria-label="Capas evolutivas"
             style={{
               position:'fixed', top:50, right:16, zIndex:999,
