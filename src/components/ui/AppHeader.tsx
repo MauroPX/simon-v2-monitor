@@ -37,9 +37,22 @@ const STATUS = { live:'● LIVE', next:'◎ PRÓX', roadmap:'○ ROAD', future:'
  * Left: label + ícono (acción principal)
  * Right: chevron (abre dropdown de capas)
  */
+// Estado global para que no se resetee con re-renders del header
+let _roadmapOpen = false
+let _roadmapActive: number|null = null
+
 function RoadmapSplitButton() {
-  const [open, setOpen] = useState(false)
-  const [active, setActive] = useState<number|null>(null)
+  const [, forceUpdate] = useState(0)
+  const open = _roadmapOpen
+  const active = _roadmapActive
+  const setOpen = (v: boolean | ((p: boolean) => boolean)) => {
+    _roadmapOpen = typeof v === 'function' ? v(_roadmapOpen) : v
+    forceUpdate(n => n + 1)
+  }
+  const setActive = (v: number | null | ((p: number|null) => number|null)) => {
+    _roadmapActive = typeof v === 'function' ? v(_roadmapActive) : v
+    forceUpdate(n => n + 1)
+  }
 
   return (
     <div style={{position:'relative'}} data-atomic="molecule" data-component="RoadmapSplitButton">
