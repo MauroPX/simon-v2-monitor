@@ -15,8 +15,8 @@ const CAT_EMOJI: Record<string,string> = {
   truck:'🚛', car:'🚗', motorcycle:'🏍️', bus:'🚌', person:'🚶', boat:'⛵', default:'🚙'
 }
 const CAT_COLOR: Record<string,string> = {
-  truck: '#ef4444', car: '#4EEAC4', motorcycle: '#F59E0B',
-  bus: '#2AB894', person: '#ec4899', boat: '#06b6d4', default: '#6366f1',
+  truck: '#ef4444', car: '#00ffc2', motorcycle: '#ffb547',
+  bus: '#2ad67a', person: '#ec4899', boat: '#19b5ff', default: '#6366f1',
 }
 
 function DeviceItem({ device, isSelected, onClick }:
