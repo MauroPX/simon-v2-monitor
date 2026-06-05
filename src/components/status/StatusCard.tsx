@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import { useAppStore } from '@/store/useAppStore'
 import { useTraccarPosition } from '@/hooks/useTraccar'
 import { knotsToKmh, courseToCardinal, getBatteryState } from '@/lib/utils'
@@ -38,8 +39,19 @@ export function StatusCard() {
   const { selectedDeviceId, selectDevice, devices, appState } = useAppStore()
   
   // Estados forzados desde StateTestPanel (?demo=true)
+  const [demoError, setDemoError] = React.useState(false)
+  React.useEffect(() => {
+    const onErr   = () => setDemoError(true)
+    const onClear = () => setDemoError(false)
+    window.addEventListener('simon-demo-error', onErr)
+    window.addEventListener('simon-demo-clear', onClear)
+    return () => {
+      window.removeEventListener('simon-demo-error', onErr)
+      window.removeEventListener('simon-demo-clear', onClear)
+    }
+  }, [])
   const isForcedLoading = appState === 'loading-devices'
-  const isForcedError = appState.startsWith('error')
+  const isForcedError   = demoError
   const { position: pos, isLoading, isError } = useTraccarPosition()
   const device = devices.find(d=>d.id===selectedDeviceId)
 

@@ -23,6 +23,7 @@ export function StateTestPanel() {
 
   const forceState = (id: string) => {
     setActive(id)
+    window.dispatchEvent(new CustomEvent('simon-demo-clear'))
     if (id === 'normal') {
       if (devices[0]) selectDevice(devices[0].id)
       setTimeout(() => setAppState('idle'), 10)
@@ -31,11 +32,8 @@ export function StateTestPanel() {
       if (devices[0] && !useAppStore.getState().selectedDeviceId) selectDevice(devices[0].id)
       setTimeout(() => setAppState('loading-devices'), 50)
     } else if (id === 'error') {
-      const store = useAppStore.getState()
-      if (!store.selectedDeviceId && devices[0]) store.selectDevice(devices[0].id)
-      requestAnimationFrame(() => {
-        useAppStore.getState().setAppState('error-tracking', 'No pudimos conectar con el servidor de seguimiento.')
-      })
+      if (!useAppStore.getState().selectedDeviceId && devices[0]) selectDevice(devices[0].id)
+      window.dispatchEvent(new CustomEvent('simon-demo-error'))
     } else if (id === 'empty') {
       selectDevice(null as any)
       setTimeout(() => setAppState('idle'), 10)
