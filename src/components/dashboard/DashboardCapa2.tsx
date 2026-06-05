@@ -262,7 +262,7 @@ export function DashboardCapa2() {
   // Bootstraps data fetching even during connecting skeleton (children aren't mounted yet)
   useTraccarLive()
 
-  const { connectionState, setConnectionState } = useAppStoreV2()
+  const { connectionState, dataSource, setConnectionState } = useAppStoreV2()
   const queryClient = useQueryClient()
 
   const handleRetry = useCallback(() => {
@@ -271,7 +271,7 @@ export function DashboardCapa2() {
     setConnectionState('connecting')
   }, [queryClient, setConnectionState])
 
-  if (connectionState === 'connecting') return <GlobalConnectingState />
+  if (connectionState === 'connecting' && dataSource !== 'demo') return <GlobalConnectingState />
 
   if (connectionState === 'error') return <ErrorOverlay onRetry={handleRetry} />
 
