@@ -7,26 +7,14 @@
     "status": "online",
     "lat": 4.6550,
     "lng": -74.1100,
-    "driver": {
-      "name": "Carlos Mendoza",
-      "phone": "+57 310 234 5678"
-    },
-    "origin": {
-      "lat": 4.7016,
-      "lng": -74.1469,
-      "label": "Aeropuerto El Dorado"
-    },
-    "destination": {
-      "lat": 4.6097,
-      "lng": -74.0817,
-      "label": "Centro Internacional",
-      "eta": "2026-06-04T14:30:00-05:00"
-    },
+    "driver": { "name": "Carlos Mendoza", "phone": "+57 310 234 5678" },
+    "origin":      { "lat": 4.7016, "lng": -74.1469, "label": "Aeropuerto El Dorado" },
+    "destination": { "lat": 4.6097, "lng": -74.0817, "label": "Centro Internacional", "eta": "2026-06-05T14:30:00-05:00" },
     "waypoints": [
       { "lat": 4.6980, "lng": -74.1350 },
-      { "lat": 4.6850, "lng": -74.1200 },
-      { "lat": 4.6650, "lng": -74.1000 },
-      { "lat": 4.6300, "lng": -74.0900 }
+      { "lat": 4.6820, "lng": -74.1150 },
+      { "lat": 4.6600, "lng": -74.0980 },
+      { "lat": 4.6300, "lng": -74.0870 }
     ],
     "totalRouteKm": 15.2,
     "currentKm": 8.1,
@@ -37,97 +25,85 @@
   },
   {
     "deviceId": 102,
-    "name": "Sedán-05",
-    "plate": "YHD-812",
-    "category": "car",
-    "status": "offline",
-    "lat": 4.6937,
-    "lng": -74.0376,
-    "driver": {
-      "name": "Ana Rodríguez",
-      "phone": "+57 315 876 4321"
-    },
-    "origin": {
-      "lat": 4.7020,
-      "lng": -74.0326,
-      "label": "Usaquén"
-    },
-    "destination": {
-      "lat": 4.6769,
-      "lng": -74.0479,
-      "label": "Parque 93",
-      "eta": "2026-06-04T13:15:00-05:00"
-    },
+    "name": "Beta-02",
+    "plate": "RKT-451",
+    "category": "van",
+    "status": "online",
+    "lat": 4.7310,
+    "lng": -74.0640,
+    "driver": { "name": "María Ospina", "phone": "+57 312 567 8901" },
+    "origin":      { "lat": 4.7020, "lng": -74.0326, "label": "Usaquén" },
+    "destination": { "lat": 4.7562, "lng": -74.0895, "label": "Portal Suba", "eta": "2026-06-05T13:15:00-05:00" },
     "waypoints": [
-      { "lat": 4.6970, "lng": -74.0340 },
-      { "lat": 4.6900, "lng": -74.0380 },
-      { "lat": 4.6830, "lng": -74.0430 }
+      { "lat": 4.7120, "lng": -74.0420 },
+      { "lat": 4.7250, "lng": -74.0580 },
+      { "lat": 4.7390, "lng": -74.0720 }
     ],
-    "totalRouteKm": 6.0,
-    "currentKm": 2.0,
-    "batteryLevel": 12,
-    "speedKmh": 0,
-    "course": 180,
-    "ignition": false
+    "totalRouteKm": 9.5,
+    "currentKm": 5.2,
+    "batteryLevel": 72,
+    "speedKmh": 83,
+    "course": 315,
+    "ignition": true
   },
   {
     "deviceId": 103,
-    "name": "Moto-12",
-    "plate": "EQX-74A",
-    "category": "motorcycle",
+    "name": "Gamma-03",
+    "plate": "PNZ-183",
+    "category": "car",
     "status": "online",
-    "lat": 4.6329,
-    "lng": -74.0703,
-    "driver": {
-      "name": "Luis García",
-      "phone": "+57 321 543 2109"
-    },
-    "origin": {
-      "lat": 4.5981,
-      "lng": -74.0760,
-      "label": "La Candelaria"
-    },
-    "destination": {
-      "lat": 4.6537,
-      "lng": -74.0669,
-      "label": "Chapinero",
-      "eta": "2026-06-04T13:45:00-05:00"
-    },
+    "lat": 4.6490,
+    "lng": -74.0840,
+    "driver": { "name": "Andrés Torres", "phone": "+57 321 456 7890" },
+    "origin":      { "lat": 4.6285, "lng": -74.1514, "label": "Kennedy — Centro Comercial" },
+    "destination": { "lat": 4.6537, "lng": -74.0669, "label": "Chapinero", "eta": "2026-06-05T13:05:00-05:00" },
     "waypoints": [
-      { "lat": 4.6100, "lng": -74.0740 },
-      { "lat": 4.6250, "lng": -74.0720 },
-      { "lat": 4.6400, "lng": -74.0700 }
+      { "lat": 4.6320, "lng": -74.1250 },
+      { "lat": 4.6400, "lng": -74.1020 },
+      { "lat": 4.6490, "lng": -74.0860 },
+      { "lat": 4.6520, "lng": -74.0750 }
     ],
-    "totalRouteKm": 8.0,
-    "currentKm": 5.0,
-    "batteryLevel": 67,
-    "speedKmh": 62,
-    "course": 15,
+    "totalRouteKm": 11.8,
+    "currentKm": 7.3,
+    "batteryLevel": 60,
+    "speedKmh": 92,
+    "course": 60,
     "ignition": true
   },
   {
     "deviceId": 104,
-    "name": "Bus-7",
+    "name": "Delta-04",
+    "plate": "EQX-74A",
+    "category": "motorcycle",
+    "status": "online",
+    "lat": 4.6410,
+    "lng": -74.1680,
+    "driver": { "name": "Luis García", "phone": "+57 321 543 2109" },
+    "origin":      { "lat": 4.6155, "lng": -74.1798, "label": "Portal Bosa" },
+    "destination": { "lat": 4.6693, "lng": -74.1462, "label": "Fontibón", "eta": "2026-06-05T14:00:00-05:00" },
+    "waypoints": [
+      { "lat": 4.6230, "lng": -74.1740 },
+      { "lat": 4.6360, "lng": -74.1660 },
+      { "lat": 4.6540, "lng": -74.1560 }
+    ],
+    "totalRouteKm": 8.3,
+    "currentKm": 4.5,
+    "batteryLevel": 67,
+    "speedKmh": 55,
+    "course": 35,
+    "ignition": true
+  },
+  {
+    "deviceId": 105,
+    "name": "Epsilon-05",
     "plate": "SOC-916",
     "category": "bus",
     "status": "online",
     "lat": 4.6750,
     "lng": -74.0890,
-    "driver": {
-      "name": "María Torres",
-      "phone": "+57 300 987 6543"
-    },
-    "origin": {
-      "lat": 4.5709,
-      "lng": -74.1474,
-      "label": "Portal Sur — TransMilenio"
-    },
-    "destination": {
-      "lat": 4.7562,
-      "lng": -74.0427,
-      "label": "Portal Norte — TransMilenio",
-      "eta": "2026-06-04T16:20:00-05:00"
-    },
+    "driver": { "name": "María Torres", "phone": "+57 300 987 6543" },
+    "origin":      { "lat": 4.5709, "lng": -74.1474, "label": "Portal Sur — TransMilenio" },
+    "destination": { "lat": 4.7562, "lng": -74.0427, "label": "Portal Norte — TransMilenio", "eta": "2026-06-05T16:20:00-05:00" },
     "waypoints": [
       { "lat": 4.6050, "lng": -74.1200 },
       { "lat": 4.6350, "lng": -74.1050 },
@@ -139,6 +115,169 @@
     "batteryLevel": 94,
     "speedKmh": 28,
     "course": 355,
+    "ignition": true
+  },
+  {
+    "deviceId": 106,
+    "name": "Zeta-06",
+    "plate": "YHD-812",
+    "category": "car",
+    "status": "offline",
+    "lat": 4.6520,
+    "lng": -74.0850,
+    "driver": { "name": "Ana Rodríguez", "phone": "+57 315 876 4321" },
+    "origin":      { "lat": 4.6449, "lng": -74.0928, "label": "Teusaquillo" },
+    "destination": { "lat": 4.6769, "lng": -74.0479, "label": "Zona Rosa — Parque 93", "eta": "2026-06-05T12:00:00-05:00" },
+    "waypoints": [
+      { "lat": 4.6510, "lng": -74.0860 },
+      { "lat": 4.6600, "lng": -74.0760 },
+      { "lat": 4.6700, "lng": -74.0620 }
+    ],
+    "totalRouteKm": 6.5,
+    "currentKm": 1.2,
+    "batteryLevel": 12,
+    "speedKmh": 0,
+    "course": 45,
+    "ignition": false
+  },
+  {
+    "deviceId": 107,
+    "name": "Eta-07",
+    "plate": "MBK-550",
+    "category": "truck",
+    "status": "online",
+    "lat": 4.6930,
+    "lng": -74.1020,
+    "driver": { "name": "Roberto Vargas", "phone": "+57 317 234 5670" },
+    "origin":      { "lat": 4.7105, "lng": -74.1278, "label": "Engativá" },
+    "destination": { "lat": 4.6097, "lng": -74.0817, "label": "Centro Internacional", "eta": "2026-06-05T15:45:00-05:00" },
+    "waypoints": [
+      { "lat": 4.7020, "lng": -74.1160 },
+      { "lat": 4.6880, "lng": -74.1050 },
+      { "lat": 4.6680, "lng": -74.0940 },
+      { "lat": 4.6400, "lng": -74.0870 }
+    ],
+    "totalRouteKm": 13.5,
+    "currentKm": 4.8,
+    "batteryLevel": 22,
+    "speedKmh": 38,
+    "course": 160,
+    "ignition": true
+  },
+  {
+    "deviceId": 108,
+    "name": "Theta-08",
+    "plate": "DKP-89C",
+    "category": "motorcycle",
+    "status": "online",
+    "lat": 4.6760,
+    "lng": -74.0545,
+    "driver": { "name": "Juliana Castro", "phone": "+57 304 678 9012" },
+    "origin":      { "lat": 4.7040, "lng": -74.0508, "label": "Cedritos" },
+    "destination": { "lat": 4.5981, "lng": -74.0760, "label": "La Candelaria", "eta": "2026-06-05T13:30:00-05:00" },
+    "waypoints": [
+      { "lat": 4.6890, "lng": -74.0530 },
+      { "lat": 4.6720, "lng": -74.0560 },
+      { "lat": 4.6520, "lng": -74.0610 },
+      { "lat": 4.6270, "lng": -74.0670 }
+    ],
+    "totalRouteKm": 12.8,
+    "currentKm": 4.2,
+    "batteryLevel": 32,
+    "speedKmh": 71,
+    "course": 200,
+    "ignition": true
+  },
+  {
+    "deviceId": 109,
+    "name": "Iota-09",
+    "plate": "TWQ-634",
+    "category": "van",
+    "status": "offline",
+    "lat": 4.6285,
+    "lng": -74.1514,
+    "driver": { "name": "Carmen Díaz", "phone": "+57 319 345 6789" },
+    "origin":      { "lat": 4.6285, "lng": -74.1514, "label": "Kennedy — Av. 1 de Mayo" },
+    "destination": { "lat": 4.6310, "lng": -74.1220, "label": "Puente Aranda", "eta": "2026-06-05T11:30:00-05:00" },
+    "waypoints": [
+      { "lat": 4.6290, "lng": -74.1420 },
+      { "lat": 4.6300, "lng": -74.1320 }
+    ],
+    "totalRouteKm": 4.2,
+    "currentKm": 0.5,
+    "batteryLevel": 8,
+    "speedKmh": 0,
+    "course": 90,
+    "ignition": false
+  },
+  {
+    "deviceId": 110,
+    "name": "Kappa-10",
+    "plate": "ID-PEAT10",
+    "category": "person",
+    "status": "online",
+    "lat": 4.5600,
+    "lng": -74.1230,
+    "driver": { "name": "David Morales", "phone": "+57 302 890 1234" },
+    "origin":      { "lat": 4.5390, "lng": -74.1350, "label": "Ciudad Bolívar — Portal" },
+    "destination": { "lat": 4.6270, "lng": -74.0900, "label": "SENA — Autopista Sur", "eta": "2026-06-05T15:00:00-05:00" },
+    "waypoints": [
+      { "lat": 4.5530, "lng": -74.1280 },
+      { "lat": 4.5680, "lng": -74.1180 },
+      { "lat": 4.5880, "lng": -74.1060 },
+      { "lat": 4.6080, "lng": -74.0980 }
+    ],
+    "totalRouteKm": 11.5,
+    "currentKm": 3.2,
+    "batteryLevel": 65,
+    "speedKmh": 4,
+    "course": 35,
+    "ignition": false
+  },
+  {
+    "deviceId": 111,
+    "name": "Lambda-11",
+    "plate": "UFG-281",
+    "category": "car",
+    "status": "online",
+    "lat": 4.7180,
+    "lng": -74.1030,
+    "driver": { "name": "Valentina Cruz", "phone": "+57 318 456 7891" },
+    "origin":      { "lat": 4.7562, "lng": -74.0895, "label": "Portal Suba" },
+    "destination": { "lat": 4.7016, "lng": -74.1469, "label": "Aeropuerto El Dorado", "eta": "2026-06-05T14:10:00-05:00" },
+    "waypoints": [
+      { "lat": 4.7430, "lng": -74.0970 },
+      { "lat": 4.7260, "lng": -74.1090 },
+      { "lat": 4.7090, "lng": -74.1240 }
+    ],
+    "totalRouteKm": 10.3,
+    "currentKm": 6.1,
+    "batteryLevel": 91,
+    "speedKmh": 48,
+    "course": 220,
+    "ignition": true
+  },
+  {
+    "deviceId": 112,
+    "name": "Mu-12",
+    "plate": "VJB-703",
+    "category": "bus",
+    "status": "unknown",
+    "lat": 4.6650,
+    "lng": -74.0620,
+    "driver": { "name": "Sebastián Reyes", "phone": "+57 313 789 0123" },
+    "origin":      { "lat": 4.6537, "lng": -74.0669, "label": "Chapinero" },
+    "destination": { "lat": 4.7020, "lng": -74.0326, "label": "Usaquén", "eta": "2026-06-05T13:50:00-05:00" },
+    "waypoints": [
+      { "lat": 4.6680, "lng": -74.0610 },
+      { "lat": 4.6820, "lng": -74.0510 },
+      { "lat": 4.6940, "lng": -74.0420 }
+    ],
+    "totalRouteKm": 7.8,
+    "currentKm": 2.3,
+    "batteryLevel": 55,
+    "speedKmh": 0,
+    "course": 0,
     "ignition": true
   }
 ]
