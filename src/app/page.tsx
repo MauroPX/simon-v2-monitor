@@ -16,6 +16,18 @@ const VehicleMap = dynamic(
   )}
 )
 
+const DashboardCapa2 = dynamic(
+  () => import('@/components/dashboard/DashboardCapa2').then(m => m.DashboardCapa2),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="shimmer" style={{ width: '100%', height: '100dvh' }} />
+    ),
+  }
+)
+
+const isLayer2 = process.env.NEXT_PUBLIC_APP_LAYER === 'capa-2'
+
 export default function HomePage() {
   useAuth()
   const { appState } = useAppStore()
@@ -31,6 +43,8 @@ export default function HomePage() {
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [sidebarOpen])
+
+  if (isLayer2) return <DashboardCapa2 />
 
   return (
     <>
