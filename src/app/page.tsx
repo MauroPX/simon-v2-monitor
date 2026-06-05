@@ -1,12 +1,13 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import { AppHeader } from '@/components/ui/AppHeader'
 import { DeviceSelector } from '@/components/ui/DeviceSelector'
 import { StatusCard, StatusCardSkeleton } from '@/components/status/StatusCard'
 import { StateTestPanel } from '@/components/ui/StateTestPanel'
 import { useAppStore } from '@/store/useAppStore'
 import { useAuth } from '@/hooks/useAuth'
+import { useAppStoreV2 } from '@/store/useAppStoreV2'
 
 const VehicleMap = dynamic(
   () => import('@/components/map/VehicleMap').then(m => m.VehicleMap),
@@ -28,6 +29,21 @@ const DashboardCapa2 = dynamic(
 
 const isLayer2 = process.env.NEXT_PUBLIC_APP_LAYER === 'capa-2'
 
+function DemoFallbackProvider({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const { connectionState, setConnectionState, setDataSource } = useAppStoreV2.getState()
+      if (connectionState === 'connecting') {
+        setConnectionState('demo')
+        setDataSource('demo')
+      }
+    }, 8_000)
+    return () => clearTimeout(id)
+  }, [])
+
+  return <>{children}</>
+}
+
 export default function HomePage() {
   useAuth()
   const { appState } = useAppStore()
@@ -44,7 +60,11 @@ export default function HomePage() {
     return () => document.removeEventListener('mousedown', handler)
   }, [sidebarOpen])
 
-  if (isLayer2) return <DashboardCapa2 />
+  if (isLayer2) return (
+    <DemoFallbackProvider>
+      <DashboardCapa2 />
+    </DemoFallbackProvider>
+  )
 
   return (
     <>
