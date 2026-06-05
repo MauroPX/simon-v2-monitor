@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppStore } from '@/store/useAppStore'
@@ -41,13 +41,29 @@ function categoryIcon(cat?: string): string {
 
 // ── Global connecting skeleton ────────────────────────────────
 
+const FALLBACK_SECS = 10
+
 function GlobalConnectingState() {
+  const [secs, setSecs] = useState(FALLBACK_SECS)
+
+  useEffect(() => {
+    if (secs <= 0) return
+    const id = setTimeout(() => setSecs(s => s - 1), 1_000)
+    return () => clearTimeout(id)
+  }, [secs])
+
   return (
     <div className={styles.connecting} role="status" aria-label="Conectando con la flota" aria-busy="true">
       {[0, 1, 2, 3].map(i => (
         <div key={i} className={`${styles.skeleton_item} shimmer`} aria-hidden="true" />
       ))}
-      <p className={styles.connecting__label}>Conectando…</p>
+      <p className={styles.connecting__label}>Conectando con la flota…</p>
+      <p className={styles.connecting__sub} aria-live="polite">
+        {secs > 0
+          ? <></>
+          : <></>}
+        {secs > 0 ? `Si no hay respuesta, cargamos datos demo en ${secs}s` : 'Cargando datos de demostracion...'}
+      </p>
     </div>
   )
 }
@@ -267,3 +283,4 @@ export function DashboardCapa2() {
     />
   )
 }
+
