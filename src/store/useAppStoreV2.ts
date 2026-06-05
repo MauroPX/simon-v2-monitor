@@ -20,7 +20,7 @@ interface AppStoreV2 {
 export const useAppStoreV2 = create<AppStoreV2>()(
   persist(
     (set) => ({
-      connectionState: 'connecting',
+      connectionState: 'demo',
       dataSource: 'demo',
       layerOrder: DEFAULT_LAYER_ORDER,
 
