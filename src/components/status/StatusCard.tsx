@@ -51,7 +51,7 @@ export function StatusCard() {
     }
   }, [])
   const isForcedLoading = appState === 'loading-devices'
-  const isForcedError   = demoError
+  const isForcedError   = false // Error manejado por VehicleMap overlay
   const { position: pos, isLoading, isError } = useTraccarPosition()
   const device = devices.find(d=>d.id===selectedDeviceId)
 

@@ -5,6 +5,7 @@
  * @see ADR-003, ADR-008, ATOMIC_SPEC.json
  */
 'use client'
+import React from 'react'
 import { useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -94,6 +95,18 @@ export function VehicleMap() {
   const device = useSelectedDevice()
   const { currentPosition, previousPosition, appState } = useAppStore()
   const isError = appState === 'error-tracking'
+
+  const [demoError, setDemoError] = React.useState(false)
+  React.useEffect(() => {
+    const onErr   = () => setDemoError(true)
+    const onClear = () => setDemoError(false)
+    window.addEventListener('simon-demo-error', onErr)
+    window.addEventListener('simon-demo-clear', onClear)
+    return () => {
+      window.removeEventListener('simon-demo-error', onErr)
+      window.removeEventListener('simon-demo-clear', onClear)
+    }
+  }, [])
 
   return (
     <div role="application" aria-label="Mapa de ubicación del vehículo" data-atomic="organism" data-component="VehicleMap" className="vehicle-map"
