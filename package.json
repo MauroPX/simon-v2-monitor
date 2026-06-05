@@ -17,6 +17,9 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@netlify/functions": "^2.8.1",
     "@tanstack/react-query": "^5.45.1",
     "@tanstack/react-query-devtools": "^5.45.1",
@@ -28,6 +31,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
+    "react-leaflet-tracking-marker": "^1.0.16",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
