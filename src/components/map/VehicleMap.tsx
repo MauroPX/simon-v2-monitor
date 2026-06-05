@@ -122,6 +122,49 @@ export function VehicleMap() {
           <span>Conexión perdida — última ubicación conocida</span>
         </div>
       )}
+      {demoError && (
+        <div style={{
+          position:'absolute', inset:0, zIndex:500,
+          display:'flex', alignItems:'center', justifyContent:'center',
+          background:'rgba(0,0,0,0.55)', backdropFilter:'blur(2px)',
+        }}>
+          <div style={{
+            background:'var(--color-surface-container-high)',
+            border:'1px solid var(--color-danger)',
+            borderRadius:16, padding:'24px 32px',
+            display:'flex', flexDirection:'column', alignItems:'center', gap:12,
+            maxWidth:360, textAlign:'center',
+            boxShadow:'0 8px 32px rgba(0,0,0,0.5)',
+          }}>
+            <span className="material-symbols-outlined" aria-hidden="true"
+              style={{fontSize:40, color:'var(--color-danger)'}}>wifi_off</span>
+            <div>
+              <p style={{margin:0, fontSize:14, fontWeight:500, color:'var(--color-danger)'}}>
+                No pudimos conectar con el servidor.
+              </p>
+              <p style={{margin:'4px 0 0', fontSize:12, color:'var(--color-text-muted)', lineHeight:1.4}}>
+                Verifica tu conexión e intenta de nuevo.
+              </p>
+            </div>
+            <button type="button"
+              onClick={() => {
+                setDemoError(false)
+                window.dispatchEvent(new CustomEvent('simon-demo-clear'))
+              }}
+              style={{
+                display:'flex', alignItems:'center', gap:6,
+                padding:'10px 24px', minHeight:44,
+                background:'var(--color-danger)', color:'#fff',
+                border:'none', borderRadius:8,
+                fontSize:13, fontWeight:600, cursor:'pointer',
+              }}
+              aria-label="Reintentar conexión">
+              <span className="material-symbols-outlined" aria-hidden="true" style={{fontSize:16}}>refresh</span>
+              Reintentar
+            </button>
+          </div>
+        </div>
+      )}
       <MapContainer center={[4.7110, -74.0721]} zoom={12}
         style={{ height:'100%', width:'100%',
           opacity: isError ? 0.6 : 1,
