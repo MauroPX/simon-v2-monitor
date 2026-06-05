@@ -4,7 +4,7 @@
 // Wire into DashboardLayout in the next session.
 
 import { useEffect, useMemo, useRef } from 'react'
-import { MapContainer, TileLayer } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useAppStore } from '@/store/useAppStore'
 import { useAppStoreV2, type ConnectionState } from '@/store/useAppStoreV2'
@@ -42,6 +42,20 @@ export function MapCapa2() {
       }
     }
   }, [devices, positions])
+
+  // Historical trail for the selected vehicle (last 30 points)
+  const trailRef = useRef<Map<number, [number, number][]>>(new Map())
+
+  useEffect(() => {
+    if (selectedDeviceId === null) return
+    const pos = positions[selectedDeviceId]
+    if (!pos) return
+    const point: [number, number] = [pos.latitude, pos.longitude]
+    const trail = trailRef.current.get(selectedDeviceId) ?? []
+    trail.push(point)
+    if (trail.length > 30) trail.shift()
+    trailRef.current.set(selectedDeviceId, trail)
+  }, [positions, selectedDeviceId])
 
   // Route data for the selected vehicle
   const selectedEntry = useMemo(() => {
@@ -109,6 +123,15 @@ export function MapCapa2() {
             destination={routeData.destination}
             completedKm={routeData.completedKm}
             remainingKm={routeData.remainingKm}
+          />
+        )}
+
+        {/* Historical trail — last 30 GPS points of selected vehicle */}
+        {selectedDeviceId && (trailRef.current.get(selectedDeviceId)?.length ?? 0) > 1 && (
+          <Polyline
+            positions={trailRef.current.get(selectedDeviceId)!}
+            pathOptions={{ color: '#00ffc2', weight: 2, opacity: 0.4, dashArray: '4 2' }}
+            interactive={false}
           />
         )}
       </MapContainer>
