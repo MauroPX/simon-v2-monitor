@@ -4,8 +4,6 @@ import { useAppStoreV2 } from '@/store/useAppStoreV2'
 import type { TraccarDevice, TraccarPosition } from '@/types/traccar'
 import fleetData from '@/data/fleet-simulation.json'
 
-// ── Demo data — adapted from fleet-simulation.json to TraccarPosition / TraccarDevice
-
 type FleetEntry = (typeof fleetData)[number]
 
 function adaptToDevice(entry: FleetEntry): TraccarDevice {
@@ -35,7 +33,7 @@ function adaptToPosition(entry: FleetEntry): TraccarPosition {
     latitude: entry.lat,
     longitude: entry.lng,
     altitude: 2600,
-    speed: entry.speedKmh, // km/h — proxy also converts; consistent unit for consumers
+    speed: entry.speedKmh,
     course: entry.course,
     attributes: {
       batteryLevel: entry.batteryLevel,
@@ -50,29 +48,23 @@ const DEMO_POSITIONS: Record<number, TraccarPosition> = Object.fromEntries(
   fleetData.map(e => [e.deviceId, adaptToPosition(e)])
 )
 
-// ── Live connection helpers
-
 async function connectToLive(): Promise<TraccarDevice[]> {
   const directRes = await fetch('/api/traccar/devices', {
     signal: AbortSignal.timeout(8_000),
   })
-
   if (directRes.ok) return directRes.json() as Promise<TraccarDevice[]>
-
   if (directRes.status === 401) {
     const sessionRes = await fetch('/api/traccar/session', {
       method: 'POST',
       signal: AbortSignal.timeout(8_000),
     })
     if (!sessionRes.ok) throw new Error('auto-login-failed')
-
     const retryRes = await fetch('/api/traccar/devices', {
       signal: AbortSignal.timeout(8_000),
     })
     if (!retryRes.ok) throw new Error('devices-failed-after-login')
     return retryRes.json() as Promise<TraccarDevice[]>
   }
-
   throw new Error(`devices-failed:${directRes.status}`)
 }
 
@@ -81,12 +73,11 @@ async function fetchLivePositions(): Promise<Record<number, TraccarPosition>> {
     signal: AbortSignal.timeout(8_000),
   })
   if (!res.ok) throw new Error(`positions-failed:${res.status}`)
-
   const list = (await res.json()) as TraccarPosition[]
   return Object.fromEntries(list.map(p => [p.deviceId, p]))
 }
 
-// ── Hook
+const LIVE_TIMEOUT_MS = 10_000
 
 export function useTraccarLive() {
   const { connectionState, dataSource, setConnectionState, setDataSource } = useAppStoreV2()
@@ -95,8 +86,7 @@ export function useTraccarLive() {
   const devicesQuery = useQuery<TraccarDevice[], Error>({
     queryKey: ['live-devices'],
     queryFn: connectToLive,
-    retry: 1,
-    retryDelay: 2_000,
+    retry: 0,
     staleTime: 30_000,
   })
 
@@ -111,28 +101,37 @@ export function useTraccarLive() {
     retryDelay: attempt => Math.min(1_000 * 2 ** attempt, 8_000),
   })
 
-  // Sync connection state from devices query
+  // Safety net: si sigue 'connecting' después de 10s, caer a demo
   useEffect(() => {
-    if (devicesQuery.isLoading) {
+    if (connectionState !== 'connecting') return
+    const id = setTimeout(() => {
+      setConnectionState('demo')
+      setDataSource('demo')
+    }, LIVE_TIMEOUT_MS)
+    return () => clearTimeout(id)
+  }, [connectionState, setConnectionState, setDataSource])
+
+  // Sync desde status del query (más robusto que isLoading/isError booleans)
+  useEffect(() => {
+    const { status } = devicesQuery
+    if (status === 'pending') {
       setConnectionState('connecting')
-    } else if (devicesQuery.isSuccess) {
+    } else if (status === 'success') {
       setConnectionState('live')
       setDataSource('live')
       lastSuccessRef.current = Date.now()
-    } else if (devicesQuery.isError) {
+    } else if (status === 'error') {
       setConnectionState('demo')
       setDataSource('demo')
     }
-  }, [devicesQuery.isLoading, devicesQuery.isSuccess, devicesQuery.isError, setConnectionState, setDataSource])
+  }, [devicesQuery.status, setConnectionState, setDataSource])
 
-  // Track last successful position update and recover from stale
   useEffect(() => {
     if (positionsQuery.dataUpdatedAt === 0) return
     lastSuccessRef.current = positionsQuery.dataUpdatedAt
     if (connectionState === 'stale') setConnectionState('live')
   }, [positionsQuery.dataUpdatedAt, connectionState, setConnectionState])
 
-  // Stale detection: no update in +30s while live
   useEffect(() => {
     if (dataSource !== 'live') return
     const id = setInterval(() => {
