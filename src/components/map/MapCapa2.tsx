@@ -5,6 +5,8 @@
 
 import { useEffect, useMemo, useRef } from 'react'
 import { MapContainer, TileLayer, Polyline } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-cluster'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useAppStore } from '@/store/useAppStore'
 import { useAppStoreV2, type ConnectionState } from '@/store/useAppStoreV2'
@@ -93,26 +95,40 @@ export function MapCapa2() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         />
 
-        {/* All fleet vehicles as animated tracking markers */}
-        {devices.map(device => {
-          const pos = positions[device.id]
-          if (!pos) return null
+        {/* All fleet vehicles — clustered at low zoom levels */}
+        <MarkerClusterGroup
+          chunkedLoading
+          disableClusteringAtZoom={14}
+          spiderfyOnMaxZoom={true}
+          iconCreateFunction={(cluster: { getChildCount(): number }) => {
+            const count = cluster.getChildCount()
+            return L.divIcon({
+              html: `<div style="background:#00ffc2;color:#080808;border:2px solid #fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;" aria-label="Grupo de ${count} vehículos">${count}</div>`,
+              className: '',
+              iconSize: [44, 44],
+            })
+          }}
+        >
+          {devices.map(device => {
+            const pos = positions[device.id]
+            if (!pos) return null
 
-          const current:  [number, number] = [pos.latitude, pos.longitude]
-          const previous: [number, number] = prevPositionsRef.current[device.id] ?? current
+            const current:  [number, number] = [pos.latitude, pos.longitude]
+            const previous: [number, number] = prevPositionsRef.current[device.id] ?? current
 
-          return (
-            <TrackingMarker
-              key={device.id}
-              position={current}
-              previousPosition={previous}
-              course={pos.course}
-              status={resolveMarkerStatus(device.status, connectionState)}
-              vehicleName={device.name}
-              category={device.category ?? 'default'}
-            />
-          )
-        })}
+            return (
+              <TrackingMarker
+                key={device.id}
+                position={current}
+                previousPosition={previous}
+                course={pos.course}
+                status={resolveMarkerStatus(device.status, connectionState)}
+                vehicleName={device.name}
+                category={device.category ?? 'default'}
+              />
+            )
+          })}
+        </MarkerClusterGroup>
 
         {/* Route polyline — 3 segments — only for selected vehicle */}
         {routeData && (
