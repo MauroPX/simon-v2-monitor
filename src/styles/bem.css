@@ -108,7 +108,7 @@
   --color-online-dim:  rgba(0,255,194,0.12);
   --color-online-ring: rgba(0,255,194,0.35);
   --color-offline:     #8fa3b3;
-  --color-offline-dim: rgba(75,91,107,0.18);
+  --color-offline-dim: rgba(143,163,179,0.18);
 
   /* Semánticos */
   --color-warning:     #ffb547;
