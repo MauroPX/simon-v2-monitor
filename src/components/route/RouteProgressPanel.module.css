@@ -1,0 +1,258 @@
+/* ── RouteProgressPanel — organism ── */
+
+.panel {
+  padding: var(--space-4, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+  height: 100%;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3, 12px);
+}
+
+.title {
+  font-size: var(--typescale-title-small, 14px);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: var(--typescale-body-small, 12px);
+  color: var(--color-text-muted);
+  margin: var(--space-1, 4px) 0 0;
+}
+
+.eta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.eta__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.eta__time {
+  font-size: var(--typescale-title-small, 14px);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.eta__countdown {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* ── Progress bar container ── */
+.progress_wrap {
+  position: relative;
+  padding-bottom: var(--space-4, 16px);
+}
+
+/* Track — 3 visual segments */
+.track {
+  display: flex;
+  height: 6px;
+  border-radius: var(--shape-full, 9999px);
+  overflow: visible;
+  background: var(--color-surface-container-high);
+  position: relative;
+}
+
+.track__done {
+  height: 100%;
+  background: var(--color-online);
+  border-radius: var(--shape-full, 9999px) 0 0 var(--shape-full, 9999px);
+  transition: width 600ms var(--ease-standard, cubic-bezier(0.2, 0, 0, 1));
+  flex-shrink: 0;
+}
+
+.track__remaining {
+  flex: 1;
+  height: 100%;
+  background: var(--color-surface-container-high);
+  border-radius: 0 var(--shape-full, 9999px) var(--shape-full, 9999px) 0;
+}
+
+/* Pulse dot — current position */
+.track__dot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--color-online);
+  border: 2px solid var(--color-surface-container);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse-ring 2s infinite;
+  z-index: 2;
+  transition: left 600ms var(--ease-standard, cubic-bezier(0.2, 0, 0, 1));
+}
+
+/* Waypoint ticks */
+.tick {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 10px;
+  background: var(--color-surface-container);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* ── km labels below track ── */
+.km_row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-2, 8px);
+}
+
+.km_done {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-online);
+}
+
+.km_remaining {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* ── Waypoint list ── */
+.waypoints {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+}
+
+.waypoint_row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: 11px;
+}
+
+.waypoint_icon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-outline);
+  flex-shrink: 0;
+}
+
+.waypoint_icon--done {
+  background: var(--color-online);
+}
+
+.waypoint_label {
+  color: var(--color-text-muted);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.waypoint_km {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Stale overlay ── */
+.panel--stale .track__done,
+.panel--stale .track__dot {
+  filter: saturate(0.3);
+  opacity: 0.7;
+}
+
+.stale_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+  font-size: 11px;
+  color: var(--color-stale, #a7b4c2);
+  padding: var(--space-1, 4px) var(--space-2, 8px);
+  background: var(--color-stale-dim, rgba(167, 180, 194, 0.14));
+  border-radius: var(--shape-small, 8px);
+  border: 1px solid var(--color-stale-border, rgba(167, 180, 194, 0.35));
+}
+
+/* ── Empty state ── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 8px);
+  height: 100%;
+  padding: var(--space-8, 32px);
+  text-align: center;
+}
+
+.empty__icon {
+  font-size: 32px;
+  opacity: 0.3;
+}
+
+.empty__title {
+  font-size: var(--typescale-body-medium, 14px);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.empty__sub {
+  font-size: var(--typescale-body-small, 12px);
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Driver row ── */
+.driver {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  padding: var(--space-3, 12px);
+  background: var(--color-surface-container-high);
+  border-radius: var(--shape-small, 8px);
+  font-size: 12px;
+}
+
+.driver__name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.driver__phone {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track__dot {
+    animation: none;
+  }
+
+  .track__done,
+  .track__dot {
+    transition: none;
+  }
+}

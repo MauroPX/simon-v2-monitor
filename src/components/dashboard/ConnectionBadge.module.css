@@ -1,0 +1,98 @@
+/* ── ConnectionBadge — átomo de estado de conexión ── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border-radius: var(--shape-full, 9999px);
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  /* WCAG 2.5.8 — touch target */
+  min-height: 28px;
+  transition: background 200ms, border-color 200ms;
+}
+
+.badge--live {
+  background: var(--color-online-dim);
+  border-color: var(--color-online-ring);
+  color: var(--color-online);
+}
+
+.badge--demo {
+  background: var(--color-connecting-dim);
+  border-color: rgba(255, 181, 71, 0.30);
+  color: var(--color-connecting);
+}
+
+.badge--connecting {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container)      25%,
+    var(--color-surface-container-high) 50%,
+    var(--color-surface-container)      75%
+  );
+  background-size: 200% 100%;
+  animation: badge-shimmer 1.5s ease-in-out infinite;
+  border-color: var(--color-outline-variant);
+  color: var(--color-text-muted);
+}
+
+.badge--stale {
+  background: var(--color-stale-dim);
+  border-color: var(--color-stale-border, rgba(167, 180, 194, 0.35));
+  color: var(--color-stale);
+}
+
+.badge--error {
+  background: var(--color-danger-dim);
+  border-color: rgba(255, 77, 77, 0.30);
+  color: var(--color-danger);
+}
+
+/* ── Dot indicator ── */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot--live {
+  background: var(--color-online);
+  animation: pulse-ring 2s infinite;
+}
+
+.dot--demo {
+  background: var(--color-connecting);
+}
+
+.dot--stale {
+  background: var(--color-stale);
+  animation: badge-stale-pulse 2s ease-in-out infinite;
+}
+
+.dot--error {
+  background: var(--color-danger);
+}
+
+@keyframes badge-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes badge-stale-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot--live,
+  .dot--stale,
+  .badge--connecting {
+    animation: none;
+  }
+}

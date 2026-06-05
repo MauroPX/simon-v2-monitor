@@ -1,0 +1,128 @@
+/* ── DashboardLayout — BEM: .dashboard ── */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  grid-template-rows: 1fr;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.dashboard__sidebar {
+  background: var(--color-surface-container);
+  border-right: 1px solid var(--color-outline-variant);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard__map {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.dashboard__panel {
+  background: var(--color-surface-container);
+  border-left: 1px solid var(--color-outline-variant);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── Mobile — mapa full + bottom sheet ── */
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    position: relative;
+  }
+
+  .dashboard__sidebar,
+  .dashboard__panel {
+    display: none;
+  }
+
+  .dashboard__map {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+/* ── Bottom sheet (mobile only) ── */
+.sheet {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 90vh;
+    background: var(--color-surface-container);
+    border-radius: 16px 16px 0 0;
+    border-top: 1px solid var(--color-outline-variant);
+    z-index: 30;
+    transform: translateY(50vh);
+    transition: transform 300ms cubic-bezier(0.2, 0, 0, 1);
+    overflow: hidden;
+    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.5);
+    will-change: transform;
+  }
+}
+
+.sheet__handle_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: grab;
+  touch-action: none;
+  /* WCAG 2.5.8 — 44dp touch target */
+  min-height: 44px;
+}
+
+.sheet__handle_wrap:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -3px;
+  border-radius: 16px 16px 0 0;
+}
+
+.sheet__handle {
+  width: 40px;
+  height: 4px;
+  background: var(--color-outline-variant);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.sheet__content {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sheet__section {
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.sheet__section:last-child {
+  border-bottom: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
+}
