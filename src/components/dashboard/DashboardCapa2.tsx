@@ -7,6 +7,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useAppStoreV2 } from '@/store/useAppStoreV2'
 import { useTraccarLive } from '@/hooks/useTraccarLive'
 import { DashboardLayout } from './DashboardLayout'
+import { SpeedAlert } from '@/components/ui/SpeedAlert'
 import { ConnectionBadge } from './ConnectionBadge'
 import { StatusCardV2 } from '@/components/status/StatusCardV2'
 import { RouteProgressPanel } from '@/components/route/RouteProgressPanel'
@@ -260,7 +261,7 @@ function RightPanel() {
 
 export function DashboardCapa2() {
   // Bootstraps data fetching even during connecting skeleton (children aren't mounted yet)
-  useTraccarLive()
+  const { devices, positions } = useTraccarLive()
 
   const { connectionState, dataSource, setConnectionState } = useAppStoreV2()
   const queryClient = useQueryClient()
@@ -276,11 +277,14 @@ export function DashboardCapa2() {
   if (connectionState === 'error') return <ErrorOverlay onRetry={handleRetry} />
 
   return (
-    <DashboardLayout
-      sidebar={<VehicleListPanel />}
-      map={<MapCapa2 />}
-      panel={<RightPanel />}
-    />
+    <>
+      <SpeedAlert devices={devices} positions={positions} />
+      <DashboardLayout
+        sidebar={<VehicleListPanel />}
+        map={<MapCapa2 />}
+        panel={<RightPanel />}
+      />
+    </>
   )
 }
 
