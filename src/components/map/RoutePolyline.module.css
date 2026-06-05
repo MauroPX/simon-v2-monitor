@@ -1,0 +1,16 @@
+/* Pulse animation for the current-position CircleMarker */
+
+@keyframes route-current-pulse {
+  0%, 100% { opacity: 0.9; }
+  50%       { opacity: 0.25; }
+}
+
+.pulseDot {
+  animation: route-current-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseDot {
+    animation: none;
+  }
+}
