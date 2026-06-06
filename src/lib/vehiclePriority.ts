@@ -35,7 +35,7 @@ export function getVehiclePriority(
     ? Date.now() - new Date(lastUpdateStr).getTime()
     : Infinity
 
-  const recentlyStarted = ignition && msSinceUpdate < 5 * 60 * 1000
+  const recentlyStarted = false // solo activo con Traccar real; demo timestamps son pasado fijo
 
   // CRITICAL: velocidad excesiva
   if (speedKmh > 80) return {
