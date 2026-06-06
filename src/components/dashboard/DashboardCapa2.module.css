@@ -282,18 +282,29 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    gap: 4px;
+    gap: 6px;
     padding: 8px 0;
   }
 
   .vehicle_item {
-    min-height: 60px;
+    height: auto;          /* crece con el contenido */
+    min-height: 76px;      /* touch target WCAG + padding visual */
+    align-items: flex-start;
+    padding: 14px 10px;
     margin: 0 6px;
-    padding: 12px 10px;
+  }
+
+  .vehicle_item__icon {
+    margin-top: 2px;       /* alinea el ícono con la primera línea de texto */
+  }
+
+  .vehicle_item__info {
+    gap: 5px;              /* más espacio entre filas en mobile */
   }
 
   .vehicle_item__name {
     font-size: 13px;
+    white-space: normal;   /* permite wrap si el nombre es largo */
   }
 
   .vehicle_item__plate,
