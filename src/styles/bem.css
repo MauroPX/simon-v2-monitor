@@ -268,22 +268,26 @@
   min-height: 0;
 }
 
-/* Mobile — sidebar como drawer deslizante */
+/* Mobile — sidebar colapsa inline sobre el contenido */
 @media (max-width: 768px) {
-  .app-main { grid-template-columns: 1fr; }
-  .app-sidebar {
-    position: fixed;
-    top: var(--layout-header);
-    left: 0;
-    width: min(280px, 85vw);
-    height: calc(100dvh - var(--layout-header));
-    z-index: 40;
-    transform: translateX(-100%);
-    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  .app-layout {
+    flex-direction: column;
   }
-  .app-sidebar.open { transform: translateX(0); }
-  /* Botón hamburguesa visible solo en mobile */
-  .app-header__menu-btn { display: flex !important; }
+  .app-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 35vh;
+    overflow-y: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .app-main {
+    display: flex;
+    flex-direction: column;
+  }
+  .app-content {
+    flex-direction: column;
+  }
 }
 
 /* Panel de status card — altura fija en desktop, auto en mobile */
