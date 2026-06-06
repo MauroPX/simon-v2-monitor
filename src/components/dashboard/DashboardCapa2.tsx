@@ -11,6 +11,7 @@ import { SpeedAlert } from '@/components/ui/SpeedAlert'
 import { ConnectionBadge } from './ConnectionBadge'
 import { StatusCardV2 } from '@/components/status/StatusCardV2'
 import { RouteProgressPanel } from '@/components/route/RouteProgressPanel'
+import { AppHeader } from '@/components/ui/AppHeader'
 import { timeAgo } from '@/lib/utils'
 import styles from './DashboardCapa2.module.css'
 
@@ -61,9 +62,8 @@ function GlobalConnectingState() {
       <p className={styles.connecting__label}>Conectando con la flota…</p>
       <p className={styles.connecting__sub} aria-live="polite">
         {secs > 0
-          ? <></>
-          : <></>}
-        {secs > 0 ? `Si no hay respuesta, cargamos datos demo en ${secs}s` : 'Cargando datos de demostracion...'}
+          ? `Si no hay respuesta, cargamos datos demo en ${secs}s`
+          : 'Cargando datos de demostración...'}
       </p>
     </div>
   )
@@ -102,7 +102,7 @@ function ErrorOverlay({ onRetry }: { onRetry: () => void }) {
 
 // ── Vehicle list panel ────────────────────────────────────────
 
-function VehicleListPanel() {
+function VehicleListPanel({ onSelect }: { onSelect?: (id: number) => void }) {
   const { devices, positions } = useTraccarLive()
   const selectedDeviceId = useAppStore(s => s.selectedDeviceId)
   const selectDevice     = useAppStore(s => s.selectDevice)
@@ -141,23 +141,25 @@ function VehicleListPanel() {
               isSelected ? styles['vehicle_item--selected'] : '',
               isOffline  ? styles['vehicle_item--offline']  : '',
             ].filter(Boolean).join(' ')}
-            onClick={() => selectDevice(isSelected ? null : device.id)}
+            onClick={() => {
+              selectDevice(isSelected ? null : device.id)
+              if (!isSelected) onSelect?.(device.id)
+            }}
             onKeyDown={e => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
                 selectDevice(isSelected ? null : device.id)
+                if (!isSelected) onSelect?.(device.id)
               }
             }}
             aria-label={`${device.name}, ${device.status}, ${speed.toFixed(0)} km/h`}
           >
-            {/* Category icon */}
             <div className={styles.vehicle_item__icon}>
               <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: 16 }}>
                 {categoryIcon(device.category)}
               </span>
             </div>
 
-            {/* Info rows */}
             <div className={styles.vehicle_item__info}>
               <div className={styles.vehicle_item__row}>
                 <span className={styles.vehicle_item__name}>{device.name}</span>
@@ -260,7 +262,6 @@ function RightPanel() {
 // ── Main export ───────────────────────────────────────────────
 
 export function DashboardCapa2() {
-  // Bootstraps data fetching even during connecting skeleton (children aren't mounted yet)
   const { devices, positions } = useTraccarLive()
 
   const { connectionState, dataSource, setConnectionState } = useAppStoreV2()
@@ -269,6 +270,17 @@ export function DashboardCapa2() {
   const selectDevice     = useAppStore(s => s.selectDevice)
   const selectedDeviceId = useAppStore(s => s.selectedDeviceId)
 
+  const [mobileView, setMobileView] = useState<'list' | 'map' | 'detail'>('map')
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 767)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  // Auto-select first online device
   useEffect(() => {
     if (selectedDeviceId || devices.length === 0) return
     const first = devices.find(d => d.status === 'online') ?? devices[0]
@@ -281,10 +293,163 @@ export function DashboardCapa2() {
     setConnectionState('connecting')
   }, [queryClient, setConnectionState])
 
-  if (connectionState === 'connecting' && dataSource !== 'demo') return <GlobalConnectingState />
+  const handleSelectFromList = useCallback((deviceId: number) => {
+    selectDevice(deviceId)
+    if (isMobile) setMobileView('map')
+  }, [isMobile, selectDevice])
 
+  const selectedDevice = devices.find(d => d.id === selectedDeviceId) ?? null
+
+  if (connectionState === 'connecting' && dataSource !== 'demo') return <GlobalConnectingState />
   if (connectionState === 'error') return <ErrorOverlay onRetry={handleRetry} />
 
+  // ── Mobile layout — 3 vistas con bottom nav ──
+  if (isMobile) {
+    return (
+      <div style={{
+        display: 'flex', flexDirection: 'column',
+        height: '100dvh', overflow: 'hidden',
+        background: 'var(--color-bg)',
+        position: 'relative',
+      }}>
+        <AppHeader onMenuClick={() => {}} />
+
+        {/* Chip de vehículo activo — solo visible en vista mapa */}
+        {mobileView === 'map' && selectedDevice && (
+          <button
+            onClick={() => setMobileView('detail')}
+            aria-label={`Ver detalle de ${selectedDevice.name}`}
+            style={{
+              position: 'absolute',
+              top: 56, left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 500,
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 20,
+              padding: '6px 16px',
+              color: 'var(--color-text)',
+              fontSize: 13, fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 6,
+              minHeight: 44, whiteSpace: 'nowrap',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+            }}
+          >
+            <span style={{
+              width: 8, height: 8, borderRadius: '50%',
+              background: 'var(--color-primary)',
+              flexShrink: 0,
+            }} />
+            {selectedDevice.name} · {selectedDevice.uniqueId}
+            <span style={{ color: 'var(--color-primary)', fontSize: 12 }}>Info →</span>
+          </button>
+        )}
+
+        {/* Contenido de la vista activa */}
+        <div style={{ flex: 1, overflow: 'hidden', position: 'relative', minHeight: 0 }}>
+
+          {/* VISTA LISTA */}
+          {mobileView === 'list' && (
+            <div style={{ height: '100%', overflowY: 'auto', paddingBottom: 64 }}>
+              <VehicleListPanel onSelect={handleSelectFromList} />
+            </div>
+          )}
+
+          {/* VISTA MAPA */}
+          {mobileView === 'map' && (
+            <div style={{ height: '100%' }}>
+              <MapCapa2 />
+            </div>
+          )}
+
+          {/* VISTA DETALLE */}
+          {mobileView === 'detail' && (
+            <div style={{ height: '100%', overflowY: 'auto', paddingBottom: 64 }}>
+              <button
+                onClick={() => setMobileView('map')}
+                aria-label="Volver al mapa"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '12px 16px',
+                  background: 'none', border: 'none',
+                  color: 'var(--color-primary)',
+                  fontSize: 14, fontWeight: 600,
+                  cursor: 'pointer', minHeight: 44,
+                  width: '100%',
+                }}
+              >
+                ← Volver al mapa
+              </button>
+              {selectedDevice
+                ? <><StatusCardV2 /><RouteProgressPanel /></>
+                : (
+                  <div style={{
+                    padding: 32, textAlign: 'center',
+                    color: 'var(--color-text-muted)', fontSize: 14,
+                  }}>
+                    Selecciona un vehículo en la lista para ver su detalle
+                  </div>
+                )
+              }
+            </div>
+          )}
+        </div>
+
+        {/* Bottom navigation */}
+        <nav
+          role="tablist"
+          aria-label="Vistas del dashboard"
+          style={{
+            position: 'fixed', bottom: 0, left: 0, right: 0,
+            height: 56,
+            display: 'flex',
+            background: 'var(--color-surface)',
+            borderTop: '1px solid var(--color-border)',
+            zIndex: 200,
+          }}
+        >
+          {([
+            { view: 'list'   as const, label: 'Lista',   icon: '≡' },
+            { view: 'map'    as const, label: 'Mapa',    icon: '◎' },
+            { view: 'detail' as const, label: 'Detalle', icon: '▤' },
+          ]).map(({ view, label, icon }) => (
+            <button
+              key={view}
+              role="tab"
+              aria-selected={mobileView === view}
+              aria-label={label}
+              onClick={() => setMobileView(view)}
+              style={{
+                flex: 1, border: 'none',
+                background: 'none',
+                color: mobileView === view
+                  ? 'var(--color-primary)'
+                  : 'var(--color-text-muted)',
+                fontSize: 11,
+                fontWeight: mobileView === view ? 700 : 400,
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                gap: 3, minHeight: 44, cursor: 'pointer',
+                borderTop: mobileView === view
+                  ? '2px solid var(--color-primary)'
+                  : '2px solid transparent',
+                transition: 'color 200ms, border-top-color 200ms',
+              }}
+            >
+              <span style={{ fontSize: 20, lineHeight: 1 }}>{icon}</span>
+              {label}
+            </button>
+          ))}
+        </nav>
+
+        {/* SpeedAlert encima del bottom nav */}
+        <SpeedAlert devices={devices} positions={positions} isMobile={isMobile} />
+      </div>
+    )
+  }
+
+  // ── Desktop layout ──
   return (
     <>
       <SpeedAlert devices={devices} positions={positions} />
@@ -296,4 +461,3 @@ export function DashboardCapa2() {
     </>
   )
 }
-

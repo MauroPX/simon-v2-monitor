@@ -13,6 +13,7 @@ interface Toast {
 interface SpeedAlertProps {
   devices: TraccarDevice[]
   positions: Record<number, TraccarPosition>
+  isMobile?: boolean
 }
 
 // speed arg is in km/h
@@ -22,7 +23,7 @@ export function getBadgeLevel(speedKmh: number): 'warning' | 'danger' | null {
   return null
 }
 
-export function SpeedAlert({ devices, positions }: SpeedAlertProps) {
+export function SpeedAlert({ devices, positions, isMobile = false }: SpeedAlertProps) {
   const [toasts, setToasts] = useState<Toast[]>([])
   const selectDevice = useAppStore(s => s.selectDevice)
 
@@ -60,7 +61,11 @@ export function SpeedAlert({ devices, positions }: SpeedAlertProps) {
   return (
     <div
       style={{
-        position: 'fixed', top: 16, right: 16,
+        position: 'fixed',
+        top: isMobile ? 60 : 16,
+        right: isMobile ? 8 : 16,
+        left: isMobile ? 8 : 'auto',
+        maxWidth: isMobile ? 'calc(100vw - 16px)' : 280,
         zIndex: 9999, display: 'flex',
         flexDirection: 'column', gap: 8,
       }}

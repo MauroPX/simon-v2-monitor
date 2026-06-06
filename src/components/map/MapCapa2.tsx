@@ -4,7 +4,7 @@
 // Wire into DashboardLayout in the next session.
 
 import { useEffect, useMemo, useRef } from 'react'
-import { MapContainer, TileLayer, Polyline } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, ZoomControl } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -89,7 +89,9 @@ export function MapCapa2() {
         center={BOGOTA_CENTER}
         zoom={12}
         style={{ height: '100%', width: '100%' }}
+        zoomControl={false}
       >
+        <ZoomControl position="bottomright" />
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution='© CARTO'
