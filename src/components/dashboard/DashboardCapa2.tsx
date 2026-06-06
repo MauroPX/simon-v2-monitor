@@ -13,6 +13,7 @@ import { StatusCardV2 } from '@/components/status/StatusCardV2'
 import { RouteProgressPanel } from '@/components/route/RouteProgressPanel'
 import { AppHeader } from '@/components/ui/AppHeader'
 import { timeAgo } from '@/lib/utils'
+import { sortDevicesByPriority, type VehiclePriority } from '@/lib/vehiclePriority'
 import styles from './DashboardCapa2.module.css'
 
 // MapCapa2 requires browser/Leaflet — load without SSR
@@ -102,6 +103,23 @@ function ErrorOverlay({ onRetry }: { onRetry: () => void }) {
 
 // ── Vehicle list panel ────────────────────────────────────────
 
+function GroupLabel({ label, count, color }: { label: string; count: number; color: string }) {
+  return (
+    <div style={{
+      padding: '4px 12px',
+      fontSize: 10, fontWeight: 700,
+      letterSpacing: '0.08em',
+      color,
+      borderBottom: '1px solid var(--color-border)',
+      background: 'var(--color-surface-2)',
+      display: 'flex', justifyContent: 'space-between',
+    }}>
+      <span>{label}</span>
+      <span style={{ opacity: 0.7 }}>{count}</span>
+    </div>
+  )
+}
+
 function VehicleListPanel({ onSelect }: { onSelect?: (id: number) => void }) {
   const { devices, positions } = useTraccarLive()
   const selectedDeviceId = useAppStore(s => s.selectedDeviceId)
@@ -120,91 +138,138 @@ function VehicleListPanel({ onSelect }: { onSelect?: (id: number) => void }) {
     )
   }
 
-  return (
-    <div className={styles.vehicle_list} role="listbox" aria-label="Flota de vehículos">
-      {devices.map(device => {
-        const pos      = positions[device.id]
-        const battery  = pos?.attributes?.batteryLevel
-        const speed    = pos?.speed ?? 0
-        const lastSeen = pos ? timeAgo(pos.serverTime) : '—'
-        const isSelected = device.id === selectedDeviceId
-        const isOffline  = device.status === 'offline'
+  const sorted   = sortDevicesByPriority(devices, positions)
+  const critical = sorted.filter(d => d.priority.level === 'critical')
+  const warning  = sorted.filter(d => d.priority.level === 'warning')
+  const active   = sorted.filter(d => d.priority.level === 'active')
+  const offline  = sorted.filter(d => d.priority.level === 'offline')
 
-        return (
-          <div
-            key={device.id}
-            role="option"
-            aria-selected={isSelected}
-            tabIndex={0}
-            className={[
-              styles.vehicle_item,
-              isSelected ? styles['vehicle_item--selected'] : '',
-              isOffline  ? styles['vehicle_item--offline']  : '',
-            ].filter(Boolean).join(' ')}
-            onClick={() => {
-              selectDevice(isSelected ? null : device.id)
-              if (!isSelected) onSelect?.(device.id)
-            }}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                selectDevice(isSelected ? null : device.id)
-                if (!isSelected) onSelect?.(device.id)
-              }
-            }}
-            aria-label={`${device.name}, ${device.status}, ${speed.toFixed(0)} km/h`}
-          >
-            <div className={styles.vehicle_item__icon}>
-              <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: 16 }}>
-                {categoryIcon(device.category)}
+  const renderItem = (device: (typeof sorted)[number]) => {
+    const pos        = positions[device.id]
+    const battery    = pos?.attributes?.batteryLevel
+    const speed      = pos?.speed ?? 0
+    const lastSeen   = pos ? timeAgo(pos.serverTime) : '—'
+    const isSelected = device.id === selectedDeviceId
+    const isOffline  = device.status === 'offline'
+    const priority: VehiclePriority = device.priority
+
+    return (
+      <div
+        key={device.id}
+        role="option"
+        aria-selected={isSelected}
+        tabIndex={0}
+        className={[
+          styles.vehicle_item,
+          isSelected ? styles['vehicle_item--selected'] : '',
+          isOffline  ? styles['vehicle_item--offline']  : '',
+        ].filter(Boolean).join(' ')}
+        onClick={() => {
+          selectDevice(isSelected ? null : device.id)
+          if (!isSelected) onSelect?.(device.id)
+        }}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            selectDevice(isSelected ? null : device.id)
+            if (!isSelected) onSelect?.(device.id)
+          }
+        }}
+        aria-label={`${device.name}, ${device.status}, ${speed.toFixed(0)} km/h`}
+      >
+        <div className={styles.vehicle_item__icon}>
+          <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: 16 }}>
+            {categoryIcon(device.category)}
+          </span>
+        </div>
+
+        <div className={styles.vehicle_item__info}>
+          <div className={styles.vehicle_item__row}>
+            <span className={styles.vehicle_item__name}>{device.name}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+              {priority.badge && (
+                <span style={{
+                  fontSize: 10, fontWeight: 700,
+                  color: priority.badgeColor,
+                  border: `1px solid ${priority.badgeColor}`,
+                  borderRadius: 4,
+                  padding: '1px 5px',
+                  flexShrink: 0,
+                  opacity: 0.9,
+                }}>
+                  {priority.badge}
+                </span>
+              )}
+              <span
+                className={styles.vehicle_item__status}
+                aria-hidden="true"
+                style={{ color: isOffline ? 'var(--color-offline)' : 'var(--color-online)' }}
+              >
+                ●
               </span>
             </div>
-
-            <div className={styles.vehicle_item__info}>
-              <div className={styles.vehicle_item__row}>
-                <span className={styles.vehicle_item__name}>{device.name}</span>
-                <span
-                  className={styles.vehicle_item__status}
-                  aria-hidden="true"
-                  style={{ color: isOffline ? 'var(--color-offline)' : 'var(--color-online)' }}
-                >
-                  ●
-                </span>
-              </div>
-
-              <div className={styles.vehicle_item__row}>
-                <span className={styles.vehicle_item__plate}>{device.uniqueId}</span>
-                <span className={styles.vehicle_item__speed}>{speed.toFixed(0)} km/h</span>
-              </div>
-
-              {battery !== undefined && (
-                <div
-                  className={styles.vehicle_item__battery}
-                  role="progressbar"
-                  aria-label={`Batería ${battery}%`}
-                  aria-valuenow={battery}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                >
-                  <div
-                    className={styles.vehicle_item__battery_fill}
-                    style={{
-                      width: `${battery}%`,
-                      background: battery < 20
-                        ? 'var(--color-danger)'
-                        : battery < 40
-                          ? 'var(--color-warning)'
-                          : 'var(--color-success)',
-                    }}
-                  />
-                </div>
-              )}
-
-              <span className={styles.vehicle_item__time}>{lastSeen}</span>
-            </div>
           </div>
-        )
-      })}
+
+          <div className={styles.vehicle_item__row}>
+            <span className={styles.vehicle_item__plate}>{device.uniqueId}</span>
+            <span className={styles.vehicle_item__speed}>{speed.toFixed(0)} km/h</span>
+          </div>
+
+          {battery !== undefined && (
+            <div
+              className={styles.vehicle_item__battery}
+              role="progressbar"
+              aria-label={`Batería ${battery}%`}
+              aria-valuenow={battery}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div
+                className={styles.vehicle_item__battery_fill}
+                style={{
+                  width: `${battery}%`,
+                  background: battery < 20
+                    ? 'var(--color-danger)'
+                    : battery < 40
+                      ? 'var(--color-warning)'
+                      : 'var(--color-success)',
+                }}
+              />
+            </div>
+          )}
+
+          <span className={styles.vehicle_item__time}>{lastSeen}</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.vehicle_list} role="listbox" aria-label="Flota de vehículos">
+      {critical.length > 0 && (
+        <>
+          <GroupLabel label="ATENCIÓN" count={critical.length} color="var(--color-danger)" />
+          {critical.map(renderItem)}
+        </>
+      )}
+      {warning.length > 0 && (
+        <>
+          <GroupLabel label="ALERTA" count={warning.length} color="var(--color-warning)" />
+          {warning.map(renderItem)}
+        </>
+      )}
+      {active.length > 0 && (
+        <>
+          <GroupLabel label="EN RUTA" count={active.length} color="var(--color-primary)" />
+          {active.map(renderItem)}
+        </>
+      )}
+      {offline.length > 0 && (
+        <>
+          <GroupLabel label="OFFLINE" count={offline.length} color="var(--color-text-muted)" />
+          {offline.map(renderItem)}
+        </>
+      )}
     </div>
   )
 }
