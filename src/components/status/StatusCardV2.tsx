@@ -8,6 +8,12 @@ import { timeAgo } from '@/lib/utils'
 import fleetData from '@/data/fleet-simulation.json'
 import styles from './StatusCardV2.module.css'
 
+function formatEta(isoString: string): string {
+  return new Intl.DateTimeFormat('es-CO', {
+    hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Bogota',
+  }).format(new Date(isoString))
+}
+
 export function StatusCardV2() {
   const selectedDeviceId = useAppStore(s => s.selectedDeviceId)
   const { devices, positions } = useTraccarLive()
@@ -62,6 +68,32 @@ export function StatusCardV2() {
       className={`${styles.card}${isStale ? ` ${styles['card--stale']}` : ''}`}
       aria-label={`Telemetría de ${device.name}`}
     >
+      {/* Vehicle header — plate + status + route + ETA */}
+      <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+          <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: 1, color: 'var(--color-text, #fff)' }}>
+            {device.uniqueId}
+          </span>
+          <span style={{
+            fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 4,
+            background: device.status === 'offline' ? 'rgba(226,75,74,0.15)' : 'rgba(0,200,83,0.15)',
+            color: device.status === 'offline' ? '#E24B4A' : '#00C853',
+          }}>
+            {device.status === 'offline' ? 'Offline' : 'En línea'}
+          </span>
+        </div>
+        {fleetEntry && (
+          <>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', margin: '4px 0 2px' }}>
+              {fleetEntry.origin.label} → {fleetEntry.destination.label}
+            </p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
+              ETA {formatEta(fleetEntry.destination.eta)}
+            </p>
+          </>
+        )}
+      </div>
+
       <dl className={styles.grid}>
 
         <div className={styles.item}>

@@ -193,6 +193,28 @@ export function RouteProgressPanel() {
         <span className={styles.driver__name}>{entry.driver.name}</span>
         <span className={styles.driver__phone}>{entry.driver.phone}</span>
       </div>
+
+      {/* Big 3 metrics */}
+      <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+        <div style={{ flex: 1, textAlign: 'center', background: 'rgba(255,255,255,0.04)', borderRadius: 8, padding: '12px 8px' }}>
+          <div style={{ fontSize: 26, fontWeight: 700, lineHeight: 1, color: '#fff' }}>
+            {entry.currentKm.toFixed(1)}
+          </div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>km cumplidos</div>
+        </div>
+        <div style={{ flex: 1, textAlign: 'center', background: 'rgba(255,255,255,0.04)', borderRadius: 8, padding: '12px 8px' }}>
+          <div style={{ fontSize: 26, fontWeight: 700, lineHeight: 1, color: '#fff' }}>
+            {formatEta(entry.destination.eta)}
+          </div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>ETA</div>
+        </div>
+        <div style={{ flex: 1, textAlign: 'center', background: 'rgba(255,255,255,0.04)', borderRadius: 8, padding: '12px 8px' }}>
+          <div style={{ fontSize: 26, fontWeight: 700, lineHeight: 1, color: '#fff' }}>
+            {remainingKm.toFixed(1)}
+          </div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>km faltantes</div>
+        </div>
+      </div>
     </article>
   )
 }

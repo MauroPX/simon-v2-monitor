@@ -266,6 +266,15 @@ export function DashboardCapa2() {
   const { connectionState, dataSource, setConnectionState } = useAppStoreV2()
   const queryClient = useQueryClient()
 
+  const selectDevice     = useAppStore(s => s.selectDevice)
+  const selectedDeviceId = useAppStore(s => s.selectedDeviceId)
+
+  useEffect(() => {
+    if (selectedDeviceId || devices.length === 0) return
+    const first = devices.find(d => d.status === 'online') ?? devices[0]
+    if (first) selectDevice(first.id)
+  }, [devices])
+
   const handleRetry = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['live-devices'] })
     queryClient.invalidateQueries({ queryKey: ['live-positions'] })
