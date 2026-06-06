@@ -370,6 +370,10 @@ export function DashboardCapa2() {
 
   // ── Mobile layout — 3 vistas con bottom nav ──
   if (isMobile) {
+    const selectedPos = selectedDevice ? positions[selectedDevice.id] : null
+    const chipSpeed   = Math.round(selectedPos?.speed ?? 0)
+    const chipBattery = selectedPos?.attributes?.batteryLevel
+
     return (
       <div style={{
         display: 'flex', flexDirection: 'column',
@@ -379,36 +383,46 @@ export function DashboardCapa2() {
       }}>
         <AppHeader onMenuClick={() => {}} />
 
-        {/* Chip de vehículo activo — solo visible en vista mapa */}
+        {/* Chip de vehículo activo — bottom sheet encima del nav */}
         {mobileView === 'map' && selectedDevice && (
-          <button
-            onClick={() => setMobileView('detail')}
-            aria-label={`Ver detalle de ${selectedDevice.name}`}
+          <div
+            className="chip-vehicle"
+            aria-label={`Vehículo activo: ${selectedDevice.name}`}
             style={{
-              position: 'absolute',
-              top: 56, left: '50%',
-              transform: 'translateX(-50%)',
+              position: 'fixed',
+              bottom: 64, left: 12, right: 12,
               zIndex: 500,
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
-              borderRadius: 20,
-              padding: '6px 16px',
-              color: 'var(--color-text)',
-              fontSize: 13, fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 6,
-              minHeight: 44, whiteSpace: 'nowrap',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+              borderRadius: 12,
+              padding: '12px 16px',
+              boxShadow: '0 -4px 20px rgba(0,0,0,0.5)',
+              minHeight: 56,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              animation: 'slideUp 200ms ease',
             }}
           >
-            <span style={{
-              width: 8, height: 8, borderRadius: '50%',
-              background: 'var(--color-primary)',
-              flexShrink: 0,
-            }} />
-            {selectedDevice.name} · {selectedDevice.uniqueId}
-            <span style={{ color: 'var(--color-primary)', fontSize: 12 }}>Info →</span>
-          </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text)' }}>
+                {selectedDevice.name} · {selectedDevice.uniqueId}
+              </span>
+              <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>
+                {chipSpeed} km/h{chipBattery !== undefined ? ` · Bat ${chipBattery}%` : ''}
+              </span>
+            </div>
+            <button
+              onClick={() => setMobileView('detail')}
+              style={{
+                color: 'var(--color-primary)', fontSize: 13, fontWeight: 600,
+                background: 'none', border: 'none', cursor: 'pointer',
+                minHeight: 44, padding: '0 8px',
+              }}
+            >
+              Ver detalle →
+            </button>
+          </div>
         )}
 
         {/* Contenido de la vista activa */}
@@ -424,7 +438,7 @@ export function DashboardCapa2() {
           {/* VISTA MAPA */}
           {mobileView === 'map' && (
             <div style={{ height: '100%' }}>
-              <MapCapa2 />
+              <MapCapa2 onMarkerTap={(id) => selectDevice(id)} />
             </div>
           )}
 

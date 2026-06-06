@@ -30,11 +30,12 @@ export function getVehiclePriority(
     (device.attributes?.ignition as boolean | undefined)
   ) ?? false
 
-  const lastUpdate = position?.deviceTime
-    ? Date.now() - new Date(position.deviceTime).getTime()
+  const lastUpdateStr = position?.fixTime || position?.deviceTime
+  const msSinceUpdate = lastUpdateStr
+    ? Date.now() - new Date(lastUpdateStr).getTime()
     : Infinity
 
-  const recentlyStarted = ignition && lastUpdate < 5 * 60 * 1000
+  const recentlyStarted = ignition && msSinceUpdate < 5 * 60 * 1000
 
   // CRITICAL: velocidad excesiva
   if (speedKmh > 80) return {

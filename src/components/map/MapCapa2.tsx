@@ -10,6 +10,10 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useAppStore } from '@/store/useAppStore'
 import { useAppStoreV2, type ConnectionState } from '@/store/useAppStoreV2'
+
+interface MapCapa2Props {
+  onMarkerTap?: (deviceId: number) => void
+}
 import { useTraccarLive } from '@/hooks/useTraccarLive'
 import { findCurrentIndex } from '@/lib/haversine'
 import { TrackingMarker } from './TrackingMarker'
@@ -27,9 +31,10 @@ function resolveMarkerStatus(
   return 'online'
 }
 
-export function MapCapa2() {
+export function MapCapa2({ onMarkerTap }: MapCapa2Props = {}) {
   const { devices, positions } = useTraccarLive()
   const selectedDeviceId        = useAppStore(s => s.selectedDeviceId)
+  const selectDevice            = useAppStore(s => s.selectDevice)
   const { connectionState }     = useAppStoreV2()
 
   // Tracks previous positions for TrackingMarker smooth animation (from → to)
@@ -127,6 +132,8 @@ export function MapCapa2() {
                 status={resolveMarkerStatus(device.status, connectionState)}
                 vehicleName={device.name}
                 category={device.category ?? 'default'}
+                deviceId={device.id}
+                onSelect={(id) => { selectDevice(id); onMarkerTap?.(id) }}
               />
             )
           })}

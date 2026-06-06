@@ -11,6 +11,8 @@ interface Props {
   status:           'online' | 'offline' | 'stale'
   vehicleName:      string
   category:         string
+  deviceId:         number
+  onSelect?:        (id: number) => void
 }
 
 const STATUS_COLOR: Record<Props['status'], string> = {
@@ -51,6 +53,8 @@ export function TrackingMarker({
   status,
   vehicleName,
   category: _category,   // reserved for future Tooltip or filter use
+  deviceId,
+  onSelect,
 }: Props) {
   const markerRef = useRef<LeafletTrackingMarkerElement>(null)
 
@@ -64,8 +68,11 @@ export function TrackingMarker({
     el.setAttribute('aria-label', `${vehicleName} — ${status}`)
   }, [vehicleName, status])
 
-  // Initial aria-label on marker add to map
-  const eventHandlers = useMemo(() => ({ add: setAriaLabel }), [setAriaLabel])
+  // Initial aria-label on marker add to map; click fires onSelect
+  const eventHandlers = useMemo(
+    () => ({ add: setAriaLabel, click: () => onSelect?.(deviceId) }),
+    [setAriaLabel, onSelect, deviceId],
+  )
 
   // Keep aria-label in sync when vehicleName or status changes
   useEffect(() => { setAriaLabel() }, [setAriaLabel])

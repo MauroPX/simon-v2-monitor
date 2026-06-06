@@ -810,3 +810,13 @@ button,
     right: 12px;
   }
 }
+
+/* ── Chip vehículo — animación entrada desde abajo ── */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0 }
+  to   { transform: translateY(0);    opacity: 1 }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-vehicle { animation: none }
+}
