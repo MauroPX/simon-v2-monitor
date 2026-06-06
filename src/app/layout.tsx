@@ -2,16 +2,20 @@
 // Root layout — aplica tema inicial, fuentes, QueryClient y store
 // ThemeScript inline evita flash of wrong theme (FOWT)
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import '@/styles/globals.css'
 import '@/styles/bem.css'
 import { Providers } from './providers'
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: 'FleetControl — Monitor de Vehículo en Tiempo Real',
   description: 'Control Room Component conectado a la API de Traccar. Monitoreo GPS en tiempo real con accesibilidad WCAG 2.1 AA.',
-  robots: 'noindex', // prueba técnica — no indexar
+  robots: 'noindex',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

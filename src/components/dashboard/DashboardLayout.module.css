@@ -6,14 +6,15 @@
   flex-direction: column;
   overflow: hidden;
   background: var(--color-bg);
+  min-height: 0;
 }
 
 /* Sidebar de vehículos: franja horizontal scrolleable */
 .dashboard__sidebar {
   background: var(--color-surface-container);
-  width: 100%;
+  width: var(--layout-sidebar-mobile);
   height: auto;
-  max-height: 220px;
+  max-height: var(--layout-sidebar-max-h);
   overflow-y: auto;
   overflow-x: hidden;
   border-right: none;
@@ -35,9 +36,9 @@
 /* Panel de detalle: abajo del mapa, scrolleable */
 .dashboard__panel {
   background: var(--color-surface-container);
-  width: 100%;
+  width: var(--layout-panel-mobile);
   height: auto;
-  max-height: 45vh;
+  max-height: var(--layout-panel-max-h);
   overflow-y: auto;
   border-left: none;
   border-top: 1px solid var(--color-border);
@@ -53,7 +54,7 @@
     flex-direction: row;
   }
   .dashboard__sidebar {
-    width: 220px;
+    width: var(--layout-sidebar);
     height: 100%;
     max-height: none;
     border-bottom: none;
@@ -68,7 +69,7 @@
     min-height: 0;
   }
   .dashboard__panel {
-    width: 220px;
+    width: var(--layout-panel);
     height: 100%;
     max-height: none;
     border-top: none;
@@ -78,11 +79,8 @@
   }
 }
 
-/* DESKTOP 1024px+ — columnas más anchas */
+/* DESKTOP 1024px+ — anchos vía token (--layout-sidebar sube a 280px en :root) */
 @media (min-width: 1024px) {
-  .dashboard__sidebar {
-    width: 260px;
-  }
   .dashboard__panel {
     width: 280px;
   }
