@@ -230,79 +230,108 @@
 
 /* ══════════════════════════════════════════════════════════════
    LAYOUT RESPONSIVE — Mobile first
-   Gap D: sidebar colapsable en mobile
+   Breakpoints: mobile <768 · tablet 768-1024 · desktop >1024
    ══════════════════════════════════════════════════════════════ */
 
-/* Contenedor raíz — ocupa todo el viewport */
+/* MOBILE FIRST — base sin media query */
 .app-layout {
   display: grid;
-  grid-template-rows: var(--layout-header) 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "main";
   height: 100dvh;
+  overflow: hidden;
   background: var(--color-surface-container-low);
-  overflow: hidden;
 }
 
-/* Desktop: sidebar fija + contenido */
 .app-main {
-  display: grid;
-  grid-template-columns: var(--layout-sidebar) 1fr;
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  position: relative;
 }
 
-/* Sidebar — drawer en mobile, fija en desktop */
+/* En mobile: sidebar como franja horizontal scrolleable */
 .app-sidebar {
   background: var(--color-surface-container);
-  border-right: 1px solid var(--color-outline-variant);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 300ms cubic-bezier(0.2,0,0,1);
+  width: 100%;
+  height: 40vh;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: none;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  flex-shrink: 0;
 }
 
-/* Área de contenido — mapa + status card */
 .app-content {
-  display: grid;
-  grid-template-rows: 1fr auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   min-height: 0;
 }
 
-/* Mobile — sidebar colapsa inline sobre el contenido */
-@media (max-width: 768px) {
-  .app-layout {
-    flex-direction: column;
-  }
-  .app-sidebar {
-    width: 100%;
-    height: auto;
-    max-height: 35vh;
-    overflow-y: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-  }
-  .app-main {
-    display: flex;
-    flex-direction: column;
-  }
-  .app-content {
-    flex-direction: column;
-  }
+/* Mapa ocupa el espacio restante */
+.app-content > div:first-child {
+  flex: 1;
+  min-height: 0;
 }
 
-/* Panel de status card — altura fija en desktop, auto en mobile */
+/* Status panel visible en mobile */
 .status-panel-mobile {
   background: var(--color-surface-container);
   border-top: 1px solid var(--color-outline-variant);
   padding: 12px 16px;
-  height: var(--layout-status-panel);
-  overflow: hidden;
+  display: block;
+  max-height: 35vh;
+  overflow-y: auto;
+  flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
-  .status-panel-mobile { height: auto; max-height: 180px; }
-  /* StatusCard: 2 columnas en mobile en lugar de 4 */
+/* StatusCard: 2 columnas en mobile */
+@media (max-width: 767px) {
   .status-card__grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* TABLET 768px+ — sidebar izquierdo fijo */
+@media (min-width: 768px) {
+  .app-main {
+    flex-direction: row;
+  }
+  .app-sidebar {
+    width: 260px;
+    height: 100%;
+    max-height: none;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+  }
+  .app-content {
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .status-panel-mobile {
+    max-height: none;
+    height: var(--layout-status-panel);
+    overflow: hidden;
+  }
+}
+
+/* DESKTOP 1024px+ */
+@media (min-width: 1024px) {
+  .app-sidebar {
+    width: 280px;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -310,6 +339,7 @@
    WCAG 2.4.1: contiene el skip link
    ══════════════════════════════════════════════════════════════ */
 .app-header {
+  grid-area: header;
   display: flex;
   align-items: center;
   justify-content: space-between;
