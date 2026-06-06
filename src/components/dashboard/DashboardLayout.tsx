@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, type ReactNode } from 'react'
 import { useAppStoreV2 } from '@/store/useAppStoreV2'
+import { AppHeader } from '@/components/ui/AppHeader'
 import styles from './DashboardLayout.module.css'
 
 interface Props {
@@ -80,10 +81,13 @@ export function DashboardLayout({ sidebar, map, panel }: Props) {
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh' }}>
+      <AppHeader onMenuClick={() => {}} />
+
       {/* ── Desktop 3-column grid ── */}
       <div
         className={styles.dashboard}
+        style={{ flex: 1, minHeight: 0 }}
         data-atomic="template"
         data-component="DashboardLayout"
       >
@@ -150,6 +154,6 @@ export function DashboardLayout({ sidebar, map, panel }: Props) {
             ))}
         </div>
       </div>
-    </>
+    </div>
   )
 }

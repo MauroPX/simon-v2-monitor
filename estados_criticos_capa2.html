@@ -1,0 +1,131 @@
+
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+  .card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 0.875rem 1rem; background: var(--color-background-primary); }
+  .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; }
+  .state-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .s-new { background: var(--color-background-info); color: var(--color-text-info); }
+  .s-exists { background: var(--color-background-success); color: var(--color-text-success); }
+  .s-upgrade { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .card-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+  .card-aria { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); margin-top: 0.4rem; }
+  .section-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); letter-spacing: 0.06em; margin: 1rem 0 0.5rem; }
+  .heuristic { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 4px; background: var(--color-background-secondary); color: var(--color-text-secondary); margin-top: 4px; }
+  .divider { height: 0.5px; background: var(--color-border-tertiary); margin: 1rem 0; }
+  .legend { display: flex; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+</style>
+
+<h2 class="sr-only">Inventario completo de estados críticos de UX para Capa 2 — simon-v2-monitor</h2>
+
+<div class="legend">
+  <div class="leg"><span class="state-badge s-exists">✓ Capa 1</span> Ya existe</div>
+  <div class="leg"><span class="state-badge s-upgrade">↑ Upgrade</span> Existe, mejorar</div>
+  <div class="leg"><span class="state-badge s-new">+ Nuevo</span> Solo en Capa 2</div>
+</div>
+
+<div class="section-title">Estados base — todos los componentes con fetch</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-exists">✓ Capa 1</span><span class="card-title">Loading / Skeleton</span></div>
+    <div class="card-body">Shimmer en mapa y StatusCard. Previene CLS. Dimensiones iguales al contenido real.</div>
+    <div class="card-aria">role="status" aria-busy="true"</div>
+    <div class="heuristic">Nielsen N1 — Visibilidad del estado</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-exists">✓ Capa 1</span><span class="card-title">Success / Happy path</span></div>
+    <div class="card-body">Datos reales con micro-animaciones en cambios de valor. aria-busy="false" al resolver.</div>
+    <div class="card-aria">aria-live="polite" en StatusCard</div>
+    <div class="heuristic">Nielsen N1 · Law of Feedback</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-upgrade">↑ Upgrade</span><span class="card-title">Error de red / API caída</span></div>
+    <div class="card-body">Overlay empático en mapa. Mensaje específico: qué falló + qué hacer. Retry funcional. Auto-retry cada 10s.</div>
+    <div class="card-aria">role="alert" aria-live="assertive"</div>
+    <div class="heuristic">Nielsen N9 — Recuperación de errores</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-upgrade">↑ Upgrade</span><span class="card-title">Empty — sin vehículo</span></div>
+    <div class="card-body">Ilustración + mensaje + CTA. "Selecciona un vehículo de la lista para comenzar el monitoreo."</div>
+    <div class="card-aria">aria-labelledby + aria-describedby</div>
+    <div class="heuristic">Nielsen N6 — Reconocimiento vs recuerdo</div>
+  </div>
+</div>
+
+<div class="section-title">Estados nuevos — exclusivos de Capa 2 (API real)</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Connecting</span></div>
+    <div class="card-body">Mientras autentica con Traccar (POST /api/session). Spinner + "Conectando con la flota..." — máx 3s antes de mostrar contexto.</div>
+    <div class="card-aria">role="status" aria-live="polite"</div>
+    <div class="heuristic">Nielsen N1 · Doherty Threshold &lt;400ms</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Stale — datos viejos</span></div>
+    <div class="card-body">Datos con +30s sin actualizar. Badge ámbar "Última señal hace Xs" + marker atenuado en mapa. No es error — es advertencia.</div>
+    <div class="card-aria">role="status" aria-live="polite"</div>
+    <div class="heuristic">Nielsen N1 — visibilidad continua del estado</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Offline vehicle</span></div>
+    <div class="card-body">Vehículo seleccionado con status offline. Marker gris en mapa con última posición conocida. StatusCard muestra timestamp de última conexión.</div>
+    <div class="card-aria">aria-label="Vehículo sin señal desde [timestamp]"</div>
+    <div class="heuristic">Nielsen N5 — Prevención de errores</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Auth error — 401</span></div>
+    <div class="card-body">Credenciales inválidas o sesión expirada. Mensaje diferenciado del error de red. Reintentar con credenciales demo automáticamente.</div>
+    <div class="card-aria">role="alert" aria-live="assertive"</div>
+    <div class="heuristic">Nielsen N9 · N2 — lenguaje del usuario</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">CORS / bloqueado</span></div>
+    <div class="card-body">Traccar bloqueado por CORS (la prueba lo menciona explícitamente). Fallback automático al JSON + badge DEMO visible. No rompe la app.</div>
+    <div class="card-aria">role="alert" → luego role="status" al caer al fallback</div>
+    <div class="heuristic">Nielsen N9 — Recuperación elegante</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Live vs Demo badge</span></div>
+    <div class="card-body">Badge persistente en header. Verde "EN VIVO" con datos Traccar reales. Ámbar "DEMO" con JSON simulación. Siempre visible al operador.</div>
+    <div class="card-aria">aria-label="Fuente de datos: [LIVE|DEMO]"</div>
+    <div class="heuristic">Nielsen N1 — transparencia del sistema</div>
+  </div>
+</div>
+
+<div class="section-title">Estados de ruta — exclusivos del RouteProgressPanel</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Sin ruta asignada</span></div>
+    <div class="card-body">"Este vehículo no tiene destino asignado. Los datos de posición se muestran en tiempo real sin ruta calculada."</div>
+    <div class="card-aria">aria-describedby apunta al mensaje</div>
+    <div class="heuristic">Nielsen N6 — contexto claro</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="state-badge s-new">+ Nuevo</span><span class="card-title">Ruta en progreso</span></div>
+    <div class="card-body">Polilínea 3 segmentos: verde (cumplido) + pulse (actual) + gris (faltante). km por segmento con Haversine. ETA actualizado.</div>
+    <div class="card-aria">aria-label="Ruta: 12.4 km cumplidos, 8.1 km restantes"</div>
+    <div class="heuristic">Gestalt — continuidad visual</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section-title">WCAG 2.2 AAA — diferencias clave vs AA</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header"><span class="card-title">Contraste texto: 7:1 mínimo</span></div>
+    <div class="card-body">AAA exige 7:1 para texto normal (AA era 4.5:1). Verificar todos los tokens de Simon #00ffc2 sobre #080808.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Focus appearance (2.4.13)</span></div>
+    <div class="card-body">El área del focus ring debe tener ≥ perímetro del componente × 2px. No solo un outline visible — debe tener área calculada.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Dragging alternative (2.5.7)</span></div>
+    <div class="card-body">Drag & drop de paneles DEBE tener botones ↑ ↓ como alternativa accesible. Obligatorio para el layout reordenable.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Target size: 44×44px mínimo</span></div>
+    <div class="card-body">AAA amplía el target mínimo. Todos los botones del dashboard, incluyendo controles del mapa, deben cumplir 44dp.</div>
+  </div>
+</div>
